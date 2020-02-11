@@ -12,9 +12,8 @@ void ret_print(char* token_type);
 %} 
 
 %% 
-"\n"		{ lineno += 1; }
 \. { ret_print("DOT"); return DOT;}
-\n+ { ret_print("LINE"); lineno+=1;}
+\n { lineno+=1;}
 #.* {ret_print("single comment"); }
 [ ] {}
 \t {}
@@ -77,7 +76,6 @@ range { ret_print("RANGE"); return RANGE;}
 \[ { ret_print("LBRACKET"); return LBRACKET;}
 \] { ret_print("RBRACKET"); return RBRACKET;}
 
-'\n' { lineno += 1; }
 
 %% 
 

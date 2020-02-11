@@ -7,20 +7,19 @@
 
 %% 
 Translation_unit: Stmt Translation_unit |  ;
-Stmt: Simple_stmt Newline | Compound_stmt Newline | Assignment_stmt Newline ;
+Stmt: Simple_stmt SEMI | Compound_stmt | Assignment_stmt SEMI ;
 Assignment_stmt: ID ASOP Exp | SubScript ASOP Exp ;
-Newline: Newline LINE| SEMI | LINE ;
 Simple_stmt: Expression_stmt | Print_stmt | Del_stmt | Jump_stmt ;
 Compound_stmt: If_stmt | While_stmt | For_stmt ;
 Jump_stmt: BREAK | CONTINUE ;
 Del_stmt: DEL ID | DEL SubScript ;
 Print_stmt: PRINT LPAREN Param_list RPAREN ;
 Param_list: Exp COMMA Param_list | Exp ; 
-If_stmt: IF Exp COLON Newline LBRACE Newline Stmt RBRACE Elif_stmt Else_stmt ;
-Elif_stmt: ELIF Exp COLON Newline LBRACE Newline Stmt RBRACE Elif_stmt | ;
-Else_stmt: ELSE COLON Newline LBRACE Newline Stmt RBRACE | ;
-While_stmt: WHILE Exp COLON Newline LBRACE Newline Stmt RBRACE ;
-For_stmt: FOR ID IN Iterable COLON Newline LBRACE Newline Stmt RBRACE ;
+If_stmt: IF Exp COLON LBRACE Stmt RBRACE Elif_stmt Else_stmt ;
+Elif_stmt: ELIF Exp COLON LBRACE Stmt RBRACE Elif_stmt | ;
+Else_stmt: ELSE COLON LBRACE Stmt RBRACE | ;
+While_stmt: WHILE Exp COLON LBRACE Stmt RBRACE ;
+For_stmt: FOR ID IN Iterable COLON LBRACE Stmt RBRACE ;
 Iterable: LBRACKET Param_list RBRACKET  | RANGE LPAREN Param_list RPAREN | LIST LPAREN Param_list RPAREN | ID DOT SPLIT LPAREN Param_list RPAREN | MAP LPAREN Param_list RPAREN | INPUT LPAREN CSTR RPAREN ;
 Expression_stmt: Exp ;
 Exp:  Or_Exp ;

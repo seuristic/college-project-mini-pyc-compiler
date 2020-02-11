@@ -5,10 +5,10 @@
 
 %% 
 \. return DOT;
-\n+ return LINE;
+\n+ ;
 #.* ;
 [ ] ;
-\t ;
+\t+ ;
 False return FALSE;
 None return NONE;
 True return TRUE;
