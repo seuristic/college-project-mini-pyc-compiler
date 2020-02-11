@@ -1,0 +1,8 @@
+#a=9;99b;=88
+a=9
+print("hello")
+##comment
+for i in range(10):
+{
+	print(i)
+}
