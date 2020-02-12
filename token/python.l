@@ -1,7 +1,7 @@
 %{
 #include <stdio.h> 
 #include<stdlib.h>
-#include "y.tab.h" 
+#include "symbol.h" 
 
 extern FILE *yyin;
 extern FILE *yyout;
@@ -12,7 +12,7 @@ void ret_print(char* token_type);
 %} 
 
 %% 
-\. { ret_print("DOT"); return DOT;}
+\. { ret_print("DOT"); }
 \n { lineno+=1;}
 #.* {ret_print("single comment"); }
 [ ] {}
@@ -45,7 +45,8 @@ pop { ret_print("POP");  }
 insert { ret_print("INSERT");  }
 len { ret_print("LEN");  }
 range { ret_print("RANGE"); }
-[a-zA-Z_][a-zA-Z0-9_]* { ret_print("ID");}
+[a-zA-Z_][a-zA-Z0-9_]* { ret_print("ID"); insert("ID",yytext,NULL,NULL,lineno);display();	
+}
 [0-9]* { ret_print("CINT");  }
 [0-9]*\.[0-9]* { ret_print("CFLOAT");  }
 ; { ret_print("SEMI");  }
@@ -76,7 +77,6 @@ range { ret_print("RANGE"); }
 \[ { ret_print("LBRACKET"); }
 \] { ret_print("RBRACKET"); }
 
-
 %% 
 
 int yywrap()  
@@ -84,5 +84,16 @@ int yywrap()
    return 1;
 } 
 void ret_print(char *token_type){
+	
 	printf("yytext: %s\ttoken: %s\tlineno: %d\n", yytext, token_type, lineno);
+	///display();
 }
+int yyerror(){
+	printf("Invalid Token Format");
+	
+}
+int main()
+{
+	yylex();
+}
+
