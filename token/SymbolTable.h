@@ -101,7 +101,8 @@ void insert_exist(DataItem* item, char* value, int line)
     {
         if(!strcmp(hashArray[hashIndex]->name,name)) 
         {
-            strcpy(hashArray[hashIndex]->value,value);
+        	if(hashArray[hashIndex]->value!=NULL || value!=NULL)
+            	strcpy(hashArray[hashIndex]->value,value);
             line_insert(item->line,line);
             return;
         }
