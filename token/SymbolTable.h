@@ -101,8 +101,18 @@ void insert_exist(DataItem* item, char* value, int line)
     {
         if(!strcmp(hashArray[hashIndex]->name,name)) 
         {
-        	if(hashArray[hashIndex]->value!=NULL || value!=NULL)
+        	if(hashArray[hashIndex]->value!=NULL && value!=NULL)
             	strcpy(hashArray[hashIndex]->value,value);
+            else if(value==NULL)
+            {
+                free(hashArray[hashIndex]->value);
+                hashArray[hashIndex]->value = NULL;
+            }
+            else
+            {
+                hashArray[hashIndex]->value = string_init(value);
+            }
+            
             line_insert(item->line,line);
             return;
         }
@@ -157,7 +167,7 @@ DataItem* del(DataItem* item)
 int main() 
 {
     insert("keyword","int", NULL, NULL, 1);
-    insert("identifier","a", "INT", "9", 1);
+    insert("identifier","a", NULL, NULL, 1);
     display();
     insert("identifier","a", "INT", "29", 2);
     insert("operator","=", NULL, NULL, 1);
@@ -181,3 +191,4 @@ int main()
         printf("Element not found\n");
 }
 */
+
