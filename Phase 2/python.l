@@ -86,7 +86,7 @@ int yywrap()
 } 
 void ret_print(char *token_type)
 {
-	printf("yytext: %s\ttoken: %s\tlineno: %d\n", yytext, token_type, lineno);
+	//printf("yytext: %s\ttoken: %s\tlineno: %d\n", yytext, token_type, lineno);
 }
 
 /*int main()
