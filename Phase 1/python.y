@@ -1,6 +1,7 @@
 %{ 
 #include<stdio.h> 
 #include<stdlib.h> 
+#include "y.tab.h"
 %} 
   
 %token DOT LINE FALSE NONE TRUE LAND BREAK CONTINUE ELIF DEL ELSE FOR IF IN NOT LOR WHILE INPUT PRINT INT FLOAT STR LIST SPLIT MAP APPEND POP INSERT LEN ID CINT CFLOAT SEMI COMMA CSTR EPOP MUL DIV FDIV MOD ADD SUB ASOP G L GE LE EOP NEOP XOR BAND BOR LBRACE RBRACE LPAREN RPAREN LBRACKET RBRACKET RANGE COLON
@@ -8,7 +9,8 @@
 %% 
 Translation_unit: Stmt Translation_unit |  ;
 Stmt: Simple_stmt SEMI | Compound_stmt | Assignment_stmt SEMI ;
-Assignment_stmt: ID ASOP Exp | SubScript ASOP Exp ;
+Assignment_stmt: ID ASOP Exp {printf("%s\n",$2);}
+| SubScript ASOP Exp ;
 Simple_stmt: Expression_stmt | Print_stmt | Del_stmt | Jump_stmt ;
 Compound_stmt: If_stmt | While_stmt | For_stmt ;
 Jump_stmt: BREAK | CONTINUE ;

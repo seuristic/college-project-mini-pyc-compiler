@@ -2,7 +2,6 @@
 #include<stdio.h> 
 #include<stdlib.h> 
 #include "y.tab.h"
-#include<string.h>
 char buff[3];
 void first_val(char *first,char *temp)
 {
@@ -72,7 +71,7 @@ void expand(char *str,char *temp)
 void len(char *val,char *temp)
 {
   int t=strlen(val);
-  t=t-t/2;
+  temp=t-t/2;
   sprintf(temp,"%d",t);
 }
 %} 
@@ -137,14 +136,12 @@ Or_Exp: And_Exp | Or_Exp LOR And_Exp ;
 int yyerror(char *msg) 
 { 
   printf("Syntax Error\n"); 
-  return 1;
 } 
   
  
-int main() 
+main() 
 { 
   yyparse(); 
   display();
-  return 1;
 }
 

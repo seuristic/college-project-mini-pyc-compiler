@@ -78,7 +78,7 @@ char* string_init(char* str)
 {
     if(str==NULL)
         return NULL;
-    char* new = (char*)malloc(sizeof(strlen(str)));
+    char* new = (char*)malloc(sizeof(strlen(str)+1));
     strcpy(new,str);
     return new;
 }

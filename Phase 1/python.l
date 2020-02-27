@@ -2,6 +2,7 @@
 #include <stdio.h> 
 #include<stdlib.h>
 #include "SymbolTable.h" 
+#include "y.tab.h"
 
 extern FILE *yyin;
 extern FILE *yyout;
@@ -74,7 +75,7 @@ range  ret_print("RANGE"); //return RANGE;
 \]  ret_print("RBRACKET"); //return RBRACKET;
 [a-zA-Z_][a-zA-Z0-9_]*  ret_print("ID"); insert("ID",yytext,NULL,NULL,lineno);//return ID;
 ^[^a-zA-Z _] printf("ERROR (Wrong Identifier) at line no %d\n",lineno);
-[0-9]*  ret_print("CINT");  //return CINT;
+[0-9]*  {ret_print("CINT");  return CINT;}
 [0-9]*\.[0-9]*  ret_print("CFLOAT"); //return CFLOAT; 
 . printf("Unknown Symbol %s at line no %d\n",yytext,lineno); 
 
@@ -86,13 +87,13 @@ int yywrap()
 }
 void ret_print(char *token_type)
 {
-	printf("yytext: %s\ttoken: %s\tlineno: %d\n", yytext, token_type, lineno);
+	//printf("yytext: %s\ttoken: %s\tlineno: %d\n", yytext, token_type, lineno);
 }
 
-int main()
+/*int main()
 {
   yylex();
   printf("\nSymbol Table : \n");
   display();
-}
+}*/
 
