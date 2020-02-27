@@ -4,6 +4,7 @@
 #include "y.tab.h"
 #include<string.h>
 char buff[3];
+
 void first_val(char *first,char *temp)
 {
     int i=0;int n=strlen(first);
@@ -75,7 +76,9 @@ void len(char *val,char *temp)
   t=t-t/2;
   sprintf(temp,"%d",t);
 }
+
 %} 
+
 %union{ struct{char value[1024]; int type;}ctype; char val[1024];};
 %token DOT LINE FALSE NONE TRUE LAND BREAK CONTINUE ELIF DEL ELSE FOR IF IN NOT LOR WHILE INPUT PRINT INT FLOAT STR LIST SPLIT MAP APPEND POP INSERT LEN ID CINT CFLOAT SEMI COMMA CSTR EPOP MUL DIV FDIV MOD ADD SUB ASOP G L GE LE EOP NEOP XOR BAND BOR LBRACE RBRACE LPAREN RPAREN LBRACKET RBRACKET RANGE COLON
 %type <ctype> Exp Const Or_Exp And_Exp In_Exp Eq_Exp Rel_Exp Bit_Exp Add_Exp Mul_Exp Pow_Exp Unary_Exp Primary_Exp ID Iterable Param_list
@@ -86,8 +89,9 @@ Stmt: Simple_stmt SEMI | Compound_stmt | Assignment_stmt SEMI ;
 Assignment_stmt: ID ASOP Exp 
 {
     sprintf(buff,"%d",$3.type);
-    //printf("%d\n",$3.type);
+    //printf("%d %s %d\n",$3.type,buff,$3.value);
     insert("ID",$1.value,buff,$3.value,-1);
+    display();
 }
 Simple_stmt: Expression_stmt | Print_stmt | Jump_stmt ;
 Compound_stmt: If_stmt | While_stmt | For_stmt ;

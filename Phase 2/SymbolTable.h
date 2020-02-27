@@ -94,7 +94,7 @@ void line_insert(list* l, int line)
     return;
 }
 
-void insert_exist(DataItem* item, char* value, int line)
+void insert_exist(DataItem* item, char* datatype, char* value, int line)
 {
     char* name=string_init(item->name);
     int hashIndex = hashCode(name);
@@ -113,6 +113,19 @@ void insert_exist(DataItem* item, char* value, int line)
             {
                 hashArray[hashIndex]->value = string_init(value);
             }
+
+            if(hashArray[hashIndex]->datatype!=NULL && datatype!=NULL)
+            	strcpy(hashArray[hashIndex]->datatype,datatype);
+            else if(datatype==NULL)
+            {
+                free(hashArray[hashIndex]->datatype);
+                hashArray[hashIndex]->datatype = NULL;
+            }
+            else
+            {
+                hashArray[hashIndex]->datatype = string_init(datatype);
+            }
+            
             if(line!=-1)
                 line_insert(item->line,line);
             return;
@@ -127,7 +140,7 @@ void insert(char* type, char* name, char* datatype, char* value, int line)
     DataItem* seek = search(name);
     if(seek!=NULL)
     {
-        insert_exist(seek,value,line);
+        insert_exist(seek,datatype,value,line);
         return;    
     }
     DataItem *item = (DataItem*) malloc(sizeof(DataItem));

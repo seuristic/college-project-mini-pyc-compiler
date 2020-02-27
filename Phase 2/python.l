@@ -1,6 +1,7 @@
 %{
 #include <stdio.h> 
 #include<stdlib.h>
+#include<ctype.h>
 #include "y.tab.h"
 #include "SymbolTable.h" 
 
@@ -16,9 +17,9 @@ void ret_print(char* token_type);
 #.* {}
 [ ] {}
 \t {}
-False { ret_print("FALSE"); strcpy(yylval.val,yytext);return FALSE; }
-None { ret_print("NONE");  strcpy(yylval.val,yytext);return NONE; }
-True { ret_print("TRUE");  strcpy(yylval.val,yytext);return TRUE; }
+(F|f)(A|a)(L|l)(S|s)(E|e) { ret_print("FALSE"); strcpy(yylval.val,"FALSE");return FALSE; }
+(N|n)(O|o)(N|n)(E|e) { ret_print("NONE");  strcpy(yylval.val,"NONE");return NONE; }
+(T|t)(R|r)(U|u)(E|e) { ret_print("TRUE");  strcpy(yylval.val,"TRUE");return TRUE; }
 and { ret_print("LAND");  strcpy(yylval.val,yytext);return LAND; }
 break { ret_print("BREAK");  strcpy(yylval.val,yytext);return BREAK; }
 continue { ret_print("CONTINUE");  strcpy(yylval.val,yytext);return CONTINUE; }
