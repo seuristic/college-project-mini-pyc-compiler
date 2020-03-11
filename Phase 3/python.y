@@ -4,6 +4,74 @@
 #include "y.tab.h"
 #include<string.h>
 
+typedef struct Node
+{
+	struct Node *parent;
+	struct Node *sibling;
+  struct Node *child;
+	char *token;
+  int leaf;
+}Node;
+
+typedef struct tree
+{
+	Node *node;
+	struct tree *next;
+}tree;
+
+tree *tree_init();
+Node* create_node(Node *parent, char *token, int leaf);
+tree *add_tree(Node *newnode);
+void push(Node* node);
+void printTree(tree* T);
+void print(Node* node);
+
+tree *tree_init()
+{
+	tree *temp= (tree*)malloc(sizeof(tree));
+	temp->node = NULL;
+  return(temp);
+}
+
+Node* create_node(Node *parent, char *token, int leaf) 
+{
+	Node *newnode = (Node*)malloc(sizeof(Node));
+  newnode->token = (char*)malloc(strlen(token)*sizeof(char));
+	strcpy(newnode->token, token);
+	newnode->parent = parent;
+	newnode->sibling = NULL;
+  newnode->child = NULL;
+  newnode->leaf=leaf;
+	return(newnode);
+}
+
+tree *add_tree(Node *node)
+{
+	tree *temp= (tree*)malloc(sizeof(tree));
+	temp->node = node;
+  return(temp);
+}
+
+void print(Node* node) 
+{ 
+    if(node == NULL) 
+        return; 
+
+    printf("%s",node->token);
+    print(node->child);  
+    print(node->sibling); 
+}
+
+void printTree(tree* T)
+{
+  tree *temp = T;
+  while(temp!=NULL)
+  {
+    print(temp->node);
+    temp = temp->next;
+  }
+}
+
 void first_val(char *first,char *temp)
 {
     int i=0;int n=strlen(first);
@@ -92,6 +160,26 @@ void len(char *val,char *temp)
   sprintf(temp,"%d",t);
 }
 
+tree *head = NULL;
+tree *T_curr = NULL;
+Node *N_curr = NULL;
+
+void push(Node* node)
+{
+  if(N_curr->child==NULL)
+    N_curr->child = node;
+  else
+  {
+    Node *n = N_curr->child;
+    while(n->sibling!=NULL)
+    {
+      n=n->sibling;
+    }
+    n->sibling = node;
+  }
+  N_curr = node;
+}
+
 %} 
 
 %union{ struct{char value[1024]; int type;}ctype; char val[1024];};
@@ -99,21 +187,25 @@ void len(char *val,char *temp)
 %type <ctype> Exp Const Or_Exp And_Exp In_Exp Eq_Exp Rel_Exp Bit_Exp Add_Exp Mul_Exp Pow_Exp Unary_Exp Primary_Exp ID Iterable Param_list
 %type<val> DOT LINE FALSE NONE TRUE LAND BREAK CONTINUE ELIF DEL ELSE FOR IF IN NOT LOR WHILE INPUT PRINT INT FLOAT STR LIST SPLIT MAP APPEND POP INSERT LEN  CINT CFLOAT SEMI COMMA CSTR EPOP MUL DIV FDIV MOD ADD SUB ASOP G L GE LE EOP NEOP XOR BAND BOR LBRACE RBRACE LPAREN RPAREN LBRACKET RBRACKET RANGE COLON 
 %% 
-Translation_unit: Stmt Translation_unit |  ;
-Stmt: Simple_stmt SEMI | Compound_stmt | Assignment_stmt SEMI ;
+Translation_unit: Stmt Translation_unit {T_curr->next=tree_init();T_curr=T_curr->next;T_curr->node=create_node(NULL,"Stmt",0);N_curr=T_curr->node;}
+|  ;
+Stmt: Simple_stmt SEMI 
+| Compound_stmt 
+| Assignment_stmt SEMI ;
 Assignment_stmt: ID ASOP Exp 
 {
-    char buff[3]="";
-    sprintf(buff,"%d",$3.type);
-    //printf("%d %s %d\n",$3.type,buff,$3.value);
-    insert("ID",$1.value,buff,$3.value,-1);
+  char buff[3]="";
+  sprintf(buff,"%d",$3.type);
+  insert("ID",$1.value,buff,$3.value,-1);
+  Node *node = create_node(N_curr,"ID",0);
+  //push(node);
 }
 Simple_stmt: Expression_stmt | Print_stmt | Jump_stmt ;
 Compound_stmt: If_stmt | While_stmt | For_stmt ;
 Jump_stmt: BREAK | CONTINUE ;
 Print_stmt: PRINT LPAREN Param_list RPAREN ;
 Param_list: Param_list COMMA Exp  {$$.type=50+$1.type;strcat($$.value,",");strcat($$.value,$3.value);}
-| Exp {}
+| Exp {} ;
 If_stmt: IF Exp COLON LBRACE Stmt RBRACE Elif_stmt Else_stmt ;
 Elif_stmt: ELIF Exp COLON LBRACE Stmt RBRACE Elif_stmt | ;
 Else_stmt: ELSE COLON LBRACE Stmt RBRACE | ;
@@ -162,8 +254,13 @@ int yyerror(char *msg)
  
 int main() 
 { 
+  head = tree_init();
+  T_curr = head;
+  N_curr = T_curr->node;
   yyparse(); 
-  display();
+  display_symbol();
+  printf("\n\nAbstract Syntax Tree\n\n");
+  printTree(head);
   return 1;
 }
 
