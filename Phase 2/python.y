@@ -118,7 +118,12 @@ If_stmt: IF Exp COLON LBRACE Stmt RBRACE Elif_stmt Else_stmt ;
 Elif_stmt: ELIF Exp COLON LBRACE Stmt RBRACE Elif_stmt | ;
 Else_stmt: ELSE COLON LBRACE Stmt RBRACE | ;
 While_stmt: WHILE Exp COLON LBRACE Stmt RBRACE ;
-For_stmt: FOR ID IN Iterable COLON LBRACE Stmt RBRACE {char temp[1024]="";first_val($4.value,temp);insert("ID",$2.value,$4.type,temp,-1);}
+For_stmt: FOR ID IN Iterable COLON LBRACE Translation_unit RBRACE {
+  char temp[1024]="";first_val($4.value,temp);
+  char buff[3]="";
+  sprintf(buff,"%d",$4.type%10);
+  insert("ID",$2.value,buff,temp,-1);
+  }
 Iterable: LBRACKET Param_list RBRACKET  {$$=$2;}
 | RANGE LPAREN Param_list RPAREN {$$.type=51;char temp[1024]="";expand($3.value,temp);strcpy($$.value,temp);} 
 Expression_stmt: Exp ;
