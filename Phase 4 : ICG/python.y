@@ -247,7 +247,7 @@ int exprno = -1; //expr no
 
 %} 
 
-%union{ struct{char value[1024]; int type;struct Node *node;  char code[1024]}ctype; char val[1024]; };
+%union{ struct{char value[1024]; int type;struct Node *node;char lhs[1024]  ;char code[1024]}ctype; char val[1024]; };
 %token DOT LINE FALSE NONE TRUE LAND BREAK CONTINUE ELIF DEL ELSE FOR IF IN NOT LOR WHILE INPUT PRINT INT FLOAT STR LIST SPLIT MAP APPEND POP INSERT LEN ID CINT CFLOAT SEMI COMMA CSTR EPOP MUL DIV FDIV MOD ADD SUB ASOP G L GE LE EOP NEOP XOR BAND BOR LBRACE RBRACE LPAREN RPAREN LBRACKET RBRACKET RANGE COLON
 %type <ctype> Exp Const Or_Exp And_Exp In_Exp Eq_Exp Rel_Exp Bit_Exp Add_Exp Mul_Exp Pow_Exp Unary_Exp Primary_Exp ID Iterable Param_list Translation_unit Stmt Assignment_stmt Simple_stmt Compound_stmt Jump_stmt Print_stmt If_stmt Elif_stmt Else_stmt While_stmt For_stmt Expression_stmt Start
 %type<val> DOT LINE FALSE NONE TRUE LAND BREAK CONTINUE ELIF DEL ELSE FOR IF IN NOT LOR WHILE INPUT PRINT INT FLOAT STR LIST SPLIT MAP APPEND POP INSERT LEN  CINT CFLOAT SEMI COMMA CSTR EPOP MUL DIV FDIV MOD ADD SUB ASOP G L GE LE EOP NEOP XOR BAND BOR LBRACE RBRACE LPAREN RPAREN LBRACKET RBRACKET RANGE COLON 
@@ -489,7 +489,7 @@ Const: CINT
 
   printf("in const cint %s\n",$1);
   strcpy($$.code,$1);
-
+  sprintf($$.lhs,"%s",$1);
   exprno=0;
 
   tempno++;
@@ -725,8 +725,8 @@ Add_Exp: Mul_Exp
   add_sibling($$.node,create_node(NULL,"+",0));
   add_sibling($$.node,create_node(NULL,"Mul_Exp",0));
   add_child(end_node($$.node),$3.node);
-
-  sprintf($$.code,"t%d = %s + %s",tempno,$1.code,$3.code);
+  sprintf($$.lhs,"t%d",tempno);
+  sprintf($$.code,"t%d = %s + %s",tempno,$1.lhs,$3.code);
   printf("\n in add_exp add mul_exp, code is %s\n",$$.code);
 
   exprno=1;
