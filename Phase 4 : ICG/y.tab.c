@@ -744,13 +744,13 @@ static const yysigned_char yyrhs[] =
 static const unsigned short int yyrline[] =
 {
        0,   275,   275,   281,   288,   294,   300,   305,   312,   358,
-     359,   360,   362,   363,   364,   366,   367,   369,   377,   387,
-     395,   411,   424,   426,   435,   437,   453,   478,   486,   498,
-     507,   516,   530,   543,   556,   565,   577,   584,   594,   612,
-     620,   632,   638,   650,   660,   670,   681,   691,   698,   708,
-     716,   723,   750,   757,   782,   807,   815,   824,   831,   855,
-     880,   887,   913,   937,   963,   970,   986,  1003,  1019,  1036,
-    1043,  1059,  1077,  1084,  1093,  1100,  1111,  1119
+     362,   366,   372,   376,   381,   387,   392,   397,   405,   415,
+     423,   445,   458,   460,   469,   471,   490,   519,   527,   539,
+     548,   557,   571,   584,   597,   606,   618,   625,   635,   653,
+     661,   673,   679,   691,   701,   711,   722,   732,   739,   749,
+     757,   764,   791,   798,   823,   848,   856,   865,   872,   896,
+     921,   928,   954,   978,  1004,  1011,  1027,  1044,  1060,  1077,
+    1084,  1100,  1118,  1125,  1134,  1141,  1152,  1160
 };
 #endif
 
@@ -1616,52 +1616,52 @@ yyreduce:
         case 2:
 #line 276 "python.y"
     {
-  add_child(head->node,create_node(NULL,"Translation_unit",0));
-  add_child(head->node->child,(yyvsp[0].ctype).node);
+  /*add_child(head->node,create_node(NULL,"Translation_unit",0));
+  add_child(head->node->child,$1.node);*/
 }
     break;
 
   case 3:
 #line 282 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"Stmt",0);
-  add_child(end_node((yyval.ctype).node),(yyvsp[-1].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,"Translation_unit",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Stmt",0);
+  add_child(end_node($$.node),$1.node);
+  add_sibling($$.node,create_node(NULL,"Translation_unit",0));
+  add_child(end_node($$.node),$2.node);*/
 }
     break;
 
   case 4:
 #line 289 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"Stmt",0);
-  add_child(end_node((yyval.ctype).node),(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Stmt",0);
+  add_child(end_node($$.node),$1.node);*/
 }
     break;
 
   case 5:
 #line 295 "python.y"
     {
-  (yyval.ctype).node=create_node(NULL,"Simple_stmt",0);
-  add_child((yyval.ctype).node,(yyvsp[-1].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,";",0));
+  /*$$.node=create_node(NULL,"Simple_stmt",0);
+  add_child($$.node,$1.node);
+  add_sibling($$.node,create_node(NULL,";",0));*/
 }
     break;
 
   case 6:
 #line 301 "python.y"
     {
-  (yyval.ctype).node=create_node(NULL,"Compound_stmt",0);
-  add_child((yyval.ctype).node,(yyvsp[0].ctype).node);
+  /*$$.node=create_node(NULL,"Compound_stmt",0);
+  add_child($$.node,$1.node);*/
 }
     break;
 
   case 7:
 #line 306 "python.y"
     {
-  (yyval.ctype).node=create_node(NULL,"Assignment_stmt",0);
-  add_child((yyval.ctype).node,(yyvsp[-1].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,";",0));
+  /*$$.node=create_node(NULL,"Assignment_stmt",0);
+  add_child($$.node,$1.node);
+  add_sibling($$.node,create_node(NULL,";",0));*/
 }
     break;
 
@@ -1671,11 +1671,11 @@ yyreduce:
   char buff[3]="";
   sprintf(buff,"%d",(yyvsp[0].ctype).type);
   insert("ID",(yyvsp[-2].ctype).value,buff,(yyvsp[0].ctype).value,-1);
-  (yyval.ctype).node=create_node(NULL,"ID",0);
-  add_child((yyval.ctype).node,create_node(NULL,(yyvsp[-2].ctype).value,0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"=",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"EXP",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[0].ctype).node);
+  /*$$.node=create_node(NULL,"ID",0);
+  add_child($$.node,create_node(NULL,$1.value,0));
+  add_sibling($$.node,create_node(NULL,"=",0));
+  add_sibling($$.node,create_node(NULL,"EXP",0));
+  add_child(end_node($$.node),$3.node);*/
 
 
 
@@ -1715,209 +1715,242 @@ yyreduce:
     break;
 
   case 9:
-#line 358 "python.y"
-    {(yyval.ctype).node=create_node(NULL,"Expression_stmt",0);add_child((yyval.ctype).node,(yyvsp[0].ctype).node);}
+#line 359 "python.y"
+    {
+  //$$.node=create_node(NULL,"Expression_stmt",0);add_child($$.node,$1.node);
+}
     break;
 
   case 10:
-#line 359 "python.y"
-    {(yyval.ctype).node=create_node(NULL,"Print_stmt",0);add_child((yyval.ctype).node,(yyvsp[0].ctype).node);}
+#line 363 "python.y"
+    {
+  //$$.node=create_node(NULL,"Print_stmt",0);add_child($$.node,$1.node);
+}
     break;
 
   case 11:
-#line 360 "python.y"
-    {(yyval.ctype).node=create_node(NULL,"Jump_stmt",0);add_child((yyval.ctype).node,(yyvsp[0].ctype).node);}
+#line 367 "python.y"
+    {
+  //$$.node=create_node(NULL,"Jump_stmt",0);add_child($$.node,$1.node);
+
+}
     break;
 
   case 12:
-#line 362 "python.y"
-    {(yyval.ctype).node=create_node(NULL,"If_stmt",0);add_child((yyval.ctype).node,(yyvsp[0].ctype).node);}
+#line 373 "python.y"
+    {
+  //$$.node=create_node(NULL,"If_stmt",0);add_child($$.node,$1.node);
+}
     break;
 
   case 13:
-#line 363 "python.y"
-    {(yyval.ctype).node=create_node(NULL,"While_stmt",0);add_child((yyval.ctype).node,(yyvsp[0].ctype).node);}
+#line 377 "python.y"
+    {
+  
+  //$$.node=create_node(NULL,"While_stmt",0);add_child($$.node,$1.node);
+}
     break;
 
   case 14:
-#line 364 "python.y"
-    {(yyval.ctype).node=create_node(NULL,"For_stmt",0);add_child((yyval.ctype).node,(yyvsp[0].ctype).node);}
+#line 382 "python.y"
+    {
+  //$$.node=create_node(NULL,"For_stmt",0);add_child($$.node,$1.node);
+
+}
     break;
 
   case 15:
-#line 366 "python.y"
-    {(yyval.ctype).node=create_node(NULL,"BREAK",0);}
+#line 388 "python.y"
+    {
+  //$$.node=create_node(NULL,"BREAK",0);
+
+}
     break;
 
   case 16:
-#line 367 "python.y"
-    {(yyval.ctype).node=create_node(NULL,"CONTINUE",0);}
+#line 393 "python.y"
+    {
+  //$$.node=create_node(NULL,"CONTINUE",0);
+}
     break;
 
   case 17:
-#line 370 "python.y"
+#line 398 "python.y"
     {
-  (yyval.ctype).node=create_node(NULL,"PRINT",0);
-  add_sibling((yyval.ctype).node,create_node(NULL,"(",0));
-  add_sibling((yyval.ctype).node,(yyvsp[-1].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,")",0));
+  /*$$.node=create_node(NULL,"PRINT",0);
+  add_sibling($$.node,create_node(NULL,"(",0));
+  add_sibling($$.node,$3.node);
+  add_sibling($$.node,create_node(NULL,")",0));*/
 }
     break;
 
   case 18:
-#line 378 "python.y"
+#line 406 "python.y"
     {
   (yyval.ctype).type=50+(yyvsp[-2].ctype).type;strcat((yyval.ctype).value,",");
   strcat((yyval.ctype).value,(yyvsp[0].ctype).value);
-  (yyval.ctype).node = create_node(NULL,"Param_list",0);
-  add_child(end_node((yyval.ctype).node),(yyvsp[-2].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,",",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"EXP",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Param_list",0);
+  add_child(end_node($$.node),$1.node);
+  add_sibling($$.node,create_node(NULL,",",0));
+  add_sibling($$.node,create_node(NULL,"EXP",0));
+  add_child(end_node($$.node),$3.node);*/
 }
     break;
 
   case 19:
-#line 388 "python.y"
+#line 416 "python.y"
     {  
-  (yyval.ctype).node = create_node(NULL,"EXP",0);
-  add_child(end_node((yyval.ctype).node),(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"EXP",0);
+  add_child(end_node($$.node),$1.node);*/
 
 
 }
     break;
 
   case 20:
-#line 396 "python.y"
+#line 424 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"IF",0);
-  add_sibling((yyval.ctype).node,create_node(NULL,"EXP",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[-6].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,":",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"{",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"Translation_unit",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[-3].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,"}",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"Elif_stmt",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[-1].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,"Else_stmt",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"IF",0);
+  add_sibling($$.node,create_node(NULL,"EXP",0));
+  add_child(end_node($$.node),$2.node);
+  add_sibling($$.node,create_node(NULL,":",0));
+  add_sibling($$.node,create_node(NULL,"{",0));
+  add_sibling($$.node,create_node(NULL,"Translation_unit",0));
+  add_child(end_node($$.node),$5.node);
+  add_sibling($$.node,create_node(NULL,"}",0));
+  add_sibling($$.node,create_node(NULL,"Elif_stmt",0));
+  add_child(end_node($$.node),$7.node);
+  add_sibling($$.node,create_node(NULL,"Else_stmt",0));
+  add_child(end_node($$.node),$8.node);*/
+
+  
+  strcpy((yyval.ctype).code,(yyvsp[-6].ctype).code);
+  printf("code is:\n If False %s goto L%d\n",(yyval.ctype).code,ln++);
+  printf("Quadruple is:\n If False \t %s \t  \t L%d\n\n",(yyval.ctype).code,ln);
+
 }
     break;
 
   case 21:
-#line 412 "python.y"
+#line 446 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"ELIF",0);
-  add_sibling((yyval.ctype).node,create_node(NULL,"EXP",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[-5].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,":",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"{",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"Translation_unit",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[-2].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,"}",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"Elif_stmt",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"ELIF",0);
+  add_sibling($$.node,create_node(NULL,"EXP",0));
+  add_child(end_node($$.node),$2.node);
+  add_sibling($$.node,create_node(NULL,":",0));
+  add_sibling($$.node,create_node(NULL,"{",0));
+  add_sibling($$.node,create_node(NULL,"Translation_unit",0));
+  add_child(end_node($$.node),$5.node);
+  add_sibling($$.node,create_node(NULL,"}",0));
+  add_sibling($$.node,create_node(NULL,"Elif_stmt",0));
+  add_child(end_node($$.node),$7.node);*/
 }
     break;
 
   case 22:
-#line 424 "python.y"
+#line 458 "python.y"
     {}
     break;
 
   case 23:
-#line 427 "python.y"
+#line 461 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"ELSE",0);
-  add_sibling((yyval.ctype).node,create_node(NULL,":",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"{",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"Translation_unit",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[-1].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,"}",0));
+  /*$$.node = create_node(NULL,"ELSE",0);
+  add_sibling($$.node,create_node(NULL,":",0));
+  add_sibling($$.node,create_node(NULL,"{",0));
+  add_sibling($$.node,create_node(NULL,"Translation_unit",0));
+  add_child(end_node($$.node),$4.node);
+  add_sibling($$.node,create_node(NULL,"}",0));*/
 }
     break;
 
   case 24:
-#line 435 "python.y"
+#line 469 "python.y"
     {}
     break;
 
   case 25:
-#line 438 "python.y"
+#line 472 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"WHILE",0);
-  add_sibling((yyval.ctype).node,create_node(NULL,"EXP",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[-4].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,":",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"{",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"Translation_unit",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[-1].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,"}",0));
+  /*$$.node = create_node(NULL,"WHILE",0);
+  add_sibling($$.node,create_node(NULL,"EXP",0));
+  add_child(end_node($$.node),$2.node);
+  add_sibling($$.node,create_node(NULL,":",0));
+  add_sibling($$.node,create_node(NULL,"{",0));
+  add_sibling($$.node,create_node(NULL,"Translation_unit",0));
+  add_child(end_node($$.node),$5.node);
+  add_sibling($$.node,create_node(NULL,"}",0));*/
 
   printf("code is : \nL%d:\n", ln);
   printf("Quadruple is:\n \tLabel\t  \t L%d\n\n", ln); //quad format: op =label a1=null a2=null res=l<ln>
   ln++;
+  strcpy((yyval.ctype).code,(yyvsp[-4].ctype).code);
+  printf("code is If False %s goto L%d\n",(yyval.ctype).code,ln);
+  printf("code is : \nL%d:\n", ln);
 }
     break;
 
   case 26:
-#line 454 "python.y"
+#line 491 "python.y"
     {
   char temp[1024]="";
   first_val((yyvsp[-4].ctype).value,temp);
   char buff[3]="";
   sprintf(buff,"%d",(yyvsp[-4].ctype).type%10);
   insert("ID",(yyvsp[-6].ctype).value,buff,temp,-1);
-  (yyval.ctype).node = create_node(NULL,"FOR",0);
-  add_sibling((yyval.ctype).node,create_node(NULL,"ID",0));
-  add_child(end_node((yyval.ctype).node),create_node(NULL,(yyvsp[-6].ctype).value,0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"in",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"Iterable",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[-4].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,":",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"{",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"Translation_unit",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[-1].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,"}",0));
+  /*$$.node = create_node(NULL,"FOR",0);
+  add_sibling($$.node,create_node(NULL,"ID",0));
+  add_child(end_node($$.node),create_node(NULL,$2.value,0));
+  add_sibling($$.node,create_node(NULL,"in",0));
+  add_sibling($$.node,create_node(NULL,"Iterable",0));
+  add_child(end_node($$.node),$4.node);
+  add_sibling($$.node,create_node(NULL,":",0));
+  add_sibling($$.node,create_node(NULL,"{",0));
+  add_sibling($$.node,create_node(NULL,"Translation_unit",0));
+  add_child(end_node($$.node),$7.node);
+  add_sibling($$.node,create_node(NULL,"}",0));*/
 
 
   printf("code is : \nL%d:\n", ln);
   printf("Quadruple is:\n \tLabel\t\  \t L%d\n\n", ln); //quad format: op =label a1=null a2=null res=l<ln>
   ln++;
+
+  strcpy((yyval.ctype).code,(yyvsp[-6].ctype).code);
+  printf("code is If False %s goto L%d\n",(yyval.ctype).code,ln);
+  printf("code is : \nL%d:\n", ln);
 }
     break;
 
   case 27:
-#line 479 "python.y"
+#line 520 "python.y"
     {
   (yyval.ctype)=(yyvsp[-1].ctype);
-  (yyval.ctype).node = create_node(NULL,"[",0);
-  add_sibling((yyval.ctype).node,create_node(NULL,"Param_list",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[-1].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,"]",0));
+  /*$$.node = create_node(NULL,"[",0);
+  add_sibling($$.node,create_node(NULL,"Param_list",0));
+  add_child(end_node($$.node),$2.node);
+  add_sibling($$.node,create_node(NULL,"]",0));*/
 }
     break;
 
   case 28:
-#line 487 "python.y"
+#line 528 "python.y"
     {
   (yyval.ctype).type=51;
   char temp[1024]="";
   expand((yyvsp[-1].ctype).value,temp);strcpy((yyval.ctype).value,temp);
-  (yyval.ctype).node = create_node(NULL,"RANGE",0);
-  add_sibling((yyval.ctype).node,create_node(NULL,"(",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"Param_list",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[-1].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,")",0));
+  /*$$.node = create_node(NULL,"RANGE",0);
+  add_sibling($$.node,create_node(NULL,"(",0));
+  add_sibling($$.node,create_node(NULL,"Param_list",0));
+  add_child(end_node($$.node),$3.node);
+  add_sibling($$.node,create_node(NULL,")",0));*/
 }
     break;
 
   case 29:
-#line 499 "python.y"
+#line 540 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"Exp",0);
-  add_child((yyval.ctype).node,(yyvsp[0].ctype).node);
+ /* $$.node = create_node(NULL,"Exp",0);
+  add_child($$.node,$1.node);*/
   strcpy((yyval.ctype).code,(yyvsp[0].ctype).code);
 
 
@@ -1925,10 +1958,10 @@ yyreduce:
     break;
 
   case 30:
-#line 508 "python.y"
+#line 549 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"Or_Exp",0);
-  add_child((yyval.ctype).node,(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Or_Exp",0);
+  add_child($$.node,$1.node);*/
   strcpy((yyval.ctype).code,(yyvsp[0].ctype).code);
 
   
@@ -1936,12 +1969,12 @@ yyreduce:
     break;
 
   case 31:
-#line 517 "python.y"
+#line 558 "python.y"
     {
   (yyval.ctype).type=1;
   strcpy((yyval.ctype).value,(yyvsp[0].val));
-  (yyval.ctype).node = create_node(NULL,"CINT",0);
-  add_child((yyval.ctype).node,create_node(NULL,(yyval.ctype).value,0));
+  /*$$.node = create_node(NULL,"CINT",0);
+  add_child($$.node,create_node(NULL,$$.value,0));*/
 
   //printf("in const cint %s\n",$1);
   strcpy((yyval.ctype).code,(yyvsp[0].val));
@@ -1953,12 +1986,12 @@ yyreduce:
     break;
 
   case 32:
-#line 531 "python.y"
+#line 572 "python.y"
     {
   (yyval.ctype).type=2;
   strcpy((yyval.ctype).value,(yyvsp[0].val));
-  (yyval.ctype).node = create_node(NULL,"CFLOAT",0);
-  add_child((yyval.ctype).node,create_node(NULL,(yyval.ctype).value,0));
+  /*$$.node = create_node(NULL,"CFLOAT",0);
+  add_child($$.node,create_node(NULL,$$.value,0));*/
 
   strcpy((yyval.ctype).code,(yyvsp[0].val));
   sprintf((yyval.ctype).lhs,"%s",(yyvsp[0].val));
@@ -1969,12 +2002,12 @@ yyreduce:
     break;
 
   case 33:
-#line 544 "python.y"
+#line 585 "python.y"
     {
   (yyval.ctype).type=3;
   strcpy((yyval.ctype).value,(yyvsp[0].val));
-  (yyval.ctype).node = create_node(NULL,"CSTR",0);
-  add_child((yyval.ctype).node,create_node(NULL,(yyval.ctype).value,0));
+  /*$$.node = create_node(NULL,"CSTR",0);
+  add_child($$.node,create_node(NULL,$$.value,0));*/
 
   strcpy((yyval.ctype).code,(yyvsp[0].val));
     sprintf((yyval.ctype).lhs,"%s",(yyvsp[0].val));
@@ -1985,24 +2018,24 @@ yyreduce:
     break;
 
   case 34:
-#line 557 "python.y"
+#line 598 "python.y"
     {
   (yyval.ctype).type=4;
   strcpy((yyval.ctype).value,(yyvsp[0].val));
-  (yyval.ctype).node = create_node(NULL,"TRUE",0);
-  add_child((yyval.ctype).node,create_node(NULL,(yyval.ctype).value,0));
+  /*$$.node = create_node(NULL,"TRUE",0);
+  add_child($$.node,create_node(NULL,$$.value,0));*/
 
 
 }
     break;
 
   case 35:
-#line 566 "python.y"
+#line 607 "python.y"
     {
   (yyval.ctype).type=4;
   strcpy((yyval.ctype).value,(yyvsp[0].val));
-  (yyval.ctype).node = create_node(NULL,"FALSE",0);
-  add_child((yyval.ctype).node,create_node(NULL,(yyval.ctype).value,0));
+  /*$$.node = create_node(NULL,"FALSE",0);
+  add_child($$.node,create_node(NULL,$$.value,0));*/
 
   sprintf((yyval.ctype).lhs,"%s",(yyvsp[0].val));
   exprno=0;
@@ -2012,34 +2045,34 @@ yyreduce:
     break;
 
   case 36:
-#line 578 "python.y"
+#line 619 "python.y"
     {
   (yyval.ctype).type=5;
   strcpy((yyval.ctype).value,(yyvsp[0].val));
-  (yyval.ctype).node = create_node(NULL,"NONE",0);
-  add_child((yyval.ctype).node,create_node(NULL,(yyval.ctype).value,0));
+  /*$$.node = create_node(NULL,"NONE",0);
+  add_child($$.node,create_node(NULL,$$.value,0));*/
 }
     break;
 
   case 37:
-#line 585 "python.y"
+#line 626 "python.y"
     {
   (yyval.ctype).type=3;
   strcpy((yyval.ctype).value,"");
-  (yyval.ctype).node = create_node(NULL,"INPUT",0);
-  add_child((yyval.ctype).node,create_node(NULL,(yyval.ctype).value,0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"(",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,")",0));
+  /*$$.node = create_node(NULL,"INPUT",0);
+  add_child($$.node,create_node(NULL,$$.value,0));
+  add_sibling($$.node,create_node(NULL,"(",0));
+  add_sibling($$.node,create_node(NULL,")",0));*/
 }
     break;
 
   case 38:
-#line 595 "python.y"
+#line 636 "python.y"
     {
  
   (yyval.ctype)=(yyvsp[0].ctype); 
-  (yyval.ctype).node = create_node(NULL,"ID",0); 
-  add_child((yyval.ctype).node,create_node(NULL,(yyvsp[0].ctype).value,0));
+  /*$$.node = create_node(NULL,"ID",0); 
+  add_child($$.node,create_node(NULL,$1.value,0));*/
 
   strcpy((yyval.ctype).code,(yyvsp[0].ctype).value);
   //printf("in id %s\n",$1.value);
@@ -2055,24 +2088,24 @@ yyreduce:
     break;
 
   case 39:
-#line 613 "python.y"
+#line 654 "python.y"
     {
   (yyval.ctype)=(yyvsp[0].ctype);  
-  (yyval.ctype).node = create_node(NULL,"Const",0); 
-  add_child((yyval.ctype).node,(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Const",0); 
+  add_child($$.node,$1.node);*/
 
   
 }
     break;
 
   case 40:
-#line 621 "python.y"
+#line 662 "python.y"
     {
   (yyval.ctype)=(yyvsp[-1].ctype);
-  (yyval.ctype).node = create_node(NULL,"(",0);
-  add_sibling((yyval.ctype).node,create_node(NULL,"EXP",0));
-  add_child(end_node((yyval.ctype).node),create_node(NULL,(yyvsp[-1].ctype).node,0));
-  add_sibling((yyval.ctype).node,create_node(NULL,")",0));
+  /*$$.node = create_node(NULL,"(",0);
+  add_sibling($$.node,create_node(NULL,"EXP",0));
+  add_child(end_node($$.node),create_node(NULL,$2.node,0));
+  add_sibling($$.node,create_node(NULL,")",0));*/
 
   strcpy((yyval.ctype).code,(yyvsp[-1].ctype).code);
   sprintf((yyval.ctype).lhs,"%s",temp_var);
@@ -2081,132 +2114,132 @@ yyreduce:
     break;
 
   case 41:
-#line 633 "python.y"
+#line 674 "python.y"
     {
   (yyval.ctype)=(yyvsp[0].ctype);
-  (yyval.ctype).node = create_node(NULL,"Iterable",0);
-  add_child((yyval.ctype).node,(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Iterable",0);
+  add_child($$.node,$1.node);*/
 }
     break;
 
   case 42:
-#line 639 "python.y"
+#line 680 "python.y"
     {
   (yyval.ctype).type=1;
   char buffer[10]="";
   len((yyvsp[-1].ctype).value,buffer) ;
   strcpy((yyval.ctype).value,buffer);
-  (yyval.ctype).node = create_node(NULL,"LEN",0);
-  add_sibling((yyval.ctype).node,create_node(NULL,"(",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"Iterable",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[-1].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,")",0));
+  /*$$.node = create_node(NULL,"LEN",0);
+  add_sibling($$.node,create_node(NULL,"(",0));
+  add_sibling($$.node,create_node(NULL,"Iterable",0));
+  add_child(end_node($$.node),$3.node);
+  add_sibling($$.node,create_node(NULL,")",0));*/
 }
     break;
 
   case 43:
-#line 651 "python.y"
+#line 692 "python.y"
     {
   (yyval.ctype).type=1;
   strcpy((yyval.ctype).value,(yyvsp[-1].ctype).value);
-  (yyval.ctype).node = create_node(NULL,"INT",0);
-  add_sibling((yyval.ctype).node,create_node(NULL,"(",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"EXP",0));
-  add_child(end_node((yyval.ctype).node),create_node(NULL,(yyvsp[-1].ctype).node,0));
-  add_sibling((yyval.ctype).node,create_node(NULL,")",0));
+  /*$$.node = create_node(NULL,"INT",0);
+  add_sibling($$.node,create_node(NULL,"(",0));
+  add_sibling($$.node,create_node(NULL,"EXP",0));
+  add_child(end_node($$.node),create_node(NULL,$3.node,0));
+  add_sibling($$.node,create_node(NULL,")",0));*/
 }
     break;
 
   case 44:
-#line 661 "python.y"
+#line 702 "python.y"
     {
   (yyval.ctype).type=2;
   strcpy((yyval.ctype).value,(yyvsp[-1].ctype).value);
-  (yyval.ctype).node = create_node(NULL,"FLOAT",0);
-  add_sibling((yyval.ctype).node,create_node(NULL,"(",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"EXP",0));
-  add_child(end_node((yyval.ctype).node),create_node(NULL,(yyvsp[-1].ctype).node,0));
-  add_sibling((yyval.ctype).node,create_node(NULL,")",0));
+  /*$$.node = create_node(NULL,"FLOAT",0);
+  add_sibling($$.node,create_node(NULL,"(",0));
+  add_sibling($$.node,create_node(NULL,"EXP",0));
+  add_child(end_node($$.node),create_node(NULL,$3.node,0));
+  add_sibling($$.node,create_node(NULL,")",0));*/
 }
     break;
 
   case 45:
-#line 671 "python.y"
+#line 712 "python.y"
     {
   (yyval.ctype).type=3;
   strcpy((yyval.ctype).value,(yyvsp[-1].ctype).value);
-  (yyval.ctype).node = create_node(NULL,"STR",0);
-  add_sibling((yyval.ctype).node,create_node(NULL,"(",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"EXP",0));
-  add_child(end_node((yyval.ctype).node),create_node(NULL,(yyvsp[-1].ctype).node,0));
-  add_sibling((yyval.ctype).node,create_node(NULL,")",0));
+  /*$$.node = create_node(NULL,"STR",0);
+  add_sibling($$.node,create_node(NULL,"(",0));
+  add_sibling($$.node,create_node(NULL,"EXP",0));
+  add_child(end_node($$.node),create_node(NULL,$3.node,0));
+  add_sibling($$.node,create_node(NULL,")",0));*/
 }
     break;
 
   case 46:
-#line 682 "python.y"
+#line 723 "python.y"
     {
   (yyval.ctype).type=(yyvsp[0].ctype).type;
   char buffer[1024]="-";
   strcat(buffer,(yyvsp[0].ctype).value);
   strcpy((yyval.ctype).value,buffer);
-  (yyval.ctype).node = create_node(NULL,"-",0); 
-  add_sibling((yyval.ctype).node,create_node(NULL,"Primary_Exp",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"-",0); 
+  add_sibling($$.node,create_node(NULL,"Primary_Exp",0));
+  add_child(end_node($$.node),$2.node);*/
 }
     break;
 
   case 47:
-#line 692 "python.y"
+#line 733 "python.y"
     {
   (yyval.ctype)=(yyvsp[0].ctype);
-  (yyval.ctype).node = create_node(NULL,"+",0); 
-  add_sibling((yyval.ctype).node,create_node(NULL,"Primary_Exp",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"+",0); 
+  add_sibling($$.node,create_node(NULL,"Primary_Exp",0));
+  add_child(end_node($$.node),$2.node);*/
 }
     break;
 
   case 48:
-#line 699 "python.y"
+#line 740 "python.y"
     {
   (yyval.ctype).type=(yyvsp[0].ctype).type;
   char buffer[1024]="-";
   strcat(buffer,(yyvsp[0].ctype).value);
   strcpy((yyval.ctype).value,buffer);
-  (yyval.ctype).node = create_node(NULL,"!",0); 
-  add_sibling((yyval.ctype).node,create_node(NULL,"Primary_Exp",0));
-  add_child(end_node((yyval.ctype).node),(yyval.ctype).node);
+  /*$$.node = create_node(NULL,"!",0); 
+  add_sibling($$.node,create_node(NULL,"Primary_Exp",0));
+  add_child(end_node($$.node),$$.node);*/
 }
     break;
 
   case 49:
-#line 709 "python.y"
+#line 750 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"Primary_Exp",0); 
-  add_child((yyval.ctype).node,(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Primary_Exp",0); 
+  add_child($$.node,$1.node);*/
 
   strcpy((yyval.ctype).code,(yyvsp[0].ctype).code);
 }
     break;
 
   case 50:
-#line 717 "python.y"
+#line 758 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"Unary_Exp",0); 
-  add_child((yyval.ctype).node,(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Unary_Exp",0); 
+  add_child($$.node,$1.node);*/
   strcpy((yyval.ctype).code,(yyvsp[0].ctype).code);
 
   }
     break;
 
   case 51:
-#line 724 "python.y"
+#line 765 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"Pow_Exp",0); 
-  add_child((yyval.ctype).node,(yyvsp[-2].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,"**",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"Unary_Exp",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Pow_Exp",0); 
+  add_child($$.node,$1.node);
+  add_sibling($$.node,create_node(NULL,"**",0));
+  add_sibling($$.node,create_node(NULL,"Unary_Exp",0));
+  add_child(end_node($$.node),$3.node);*/
 
   
 
@@ -2229,23 +2262,23 @@ yyreduce:
     break;
 
   case 52:
-#line 751 "python.y"
+#line 792 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"Pow_Exp",0); 
-  add_child((yyval.ctype).node,(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Pow_Exp",0); 
+  add_child($$.node,$1.node);*/
 
   strcpy((yyval.ctype).code,(yyvsp[0].ctype).code);
 }
     break;
 
   case 53:
-#line 758 "python.y"
+#line 799 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"Mul_Exp",0); 
-  add_child((yyval.ctype).node,(yyvsp[-2].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,"*",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"Pow_Exp",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Mul_Exp",0); 
+  add_child($$.node,$1.node);
+  add_sibling($$.node,create_node(NULL,"*",0));
+  add_sibling($$.node,create_node(NULL,"Pow_Exp",0));
+  add_child(end_node($$.node),$3.node);*/
 
   sprintf(temp_var,"t%d",tempno++);
   m = strlen(temp_var);
@@ -2267,13 +2300,13 @@ yyreduce:
     break;
 
   case 54:
-#line 783 "python.y"
+#line 824 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"Mul_Exp",0); 
-  add_child((yyval.ctype).node,(yyvsp[-2].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,"/",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"Pow_Exp",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Mul_Exp",0); 
+  add_child($$.node,$1.node);
+  add_sibling($$.node,create_node(NULL,"/",0));
+  add_sibling($$.node,create_node(NULL,"Pow_Exp",0));
+  add_child(end_node($$.node),$3.node);*/
 
 
   sprintf(temp_var,"t%d",tempno++);
@@ -2295,45 +2328,45 @@ yyreduce:
     break;
 
   case 55:
-#line 808 "python.y"
+#line 849 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"Mul_Exp",0); 
-  add_child((yyval.ctype).node,(yyvsp[-2].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,"//",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"Pow_Exp",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Mul_Exp",0); 
+  add_child($$.node,$1.node);
+  add_sibling($$.node,create_node(NULL,"//",0));
+  add_sibling($$.node,create_node(NULL,"Pow_Exp",0));
+  add_child(end_node($$.node),$3.node);*/
 }
     break;
 
   case 56:
-#line 816 "python.y"
+#line 857 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"Mul_Exp",0); 
-  add_child((yyval.ctype).node,(yyvsp[-2].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,"%",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"Pow_Exp",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Mul_Exp",0); 
+  add_child($$.node,$1.node);
+  add_sibling($$.node,create_node(NULL,"%",0));
+  add_sibling($$.node,create_node(NULL,"Pow_Exp",0));
+  add_child(end_node($$.node),$3.node);*/
 }
     break;
 
   case 57:
-#line 825 "python.y"
+#line 866 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"Mul_Exp",0); 
-  add_child((yyval.ctype).node,(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Mul_Exp",0); 
+  add_child($$.node,$1.node);*/
 
   strcpy((yyval.ctype).code,(yyvsp[0].ctype).code);
 }
     break;
 
   case 58:
-#line 832 "python.y"
+#line 873 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"Add_Exp",0); 
-  add_child((yyval.ctype).node,(yyvsp[-2].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,"+",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"Mul_Exp",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Add_Exp",0); 
+  add_child($$.node,$1.node);
+  add_sibling($$.node,create_node(NULL,"+",0));
+  add_sibling($$.node,create_node(NULL,"Mul_Exp",0));
+  add_child(end_node($$.node),$3.node);*/
 
   sprintf(temp_var,"t%d",tempno++);
   m = strlen(temp_var);
@@ -2354,13 +2387,13 @@ yyreduce:
     break;
 
   case 59:
-#line 856 "python.y"
+#line 897 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"Add_Exp",0); 
-  add_child((yyval.ctype).node,(yyvsp[-2].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,"-",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"Mul_Exp",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Add_Exp",0); 
+  add_child($$.node,$1.node);
+  add_sibling($$.node,create_node(NULL,"-",0));
+  add_sibling($$.node,create_node(NULL,"Mul_Exp",0));
+  add_child(end_node($$.node),$3.node);*/
 
   sprintf(temp_var,"t%d",tempno++);
   m = strlen(temp_var);
@@ -2381,23 +2414,23 @@ yyreduce:
     break;
 
   case 60:
-#line 881 "python.y"
+#line 922 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"Add_Exp",0); 
-  add_child((yyval.ctype).node,(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Add_Exp",0); 
+  add_child($$.node,$1.node);*/
 
   strcpy((yyval.ctype).code,(yyvsp[0].ctype).code);
 }
     break;
 
   case 61:
-#line 888 "python.y"
+#line 929 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"Bit_Exp",0); 
-  add_child((yyval.ctype).node,(yyvsp[-2].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,"^",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"Add_Exp",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Bit_Exp",0); 
+  add_child($$.node,$1.node);
+  add_sibling($$.node,create_node(NULL,"^",0));
+  add_sibling($$.node,create_node(NULL,"Add_Exp",0));
+  add_child(end_node($$.node),$3.node);*/
 
   sprintf(temp_var,"t%d",tempno++);
   m = strlen(temp_var);
@@ -2420,13 +2453,13 @@ yyreduce:
     break;
 
   case 62:
-#line 914 "python.y"
+#line 955 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"Bit_Exp",0); 
-  add_child((yyval.ctype).node,(yyvsp[-2].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,"&",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"Add_Exp",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Bit_Exp",0); 
+  add_child($$.node,$1.node);
+  add_sibling($$.node,create_node(NULL,"&",0));
+  add_sibling($$.node,create_node(NULL,"Add_Exp",0));
+  add_child(end_node($$.node),$3.node);*/
 
   sprintf(temp_var,"t%d",tempno++);
   m = strlen(temp_var);
@@ -2447,13 +2480,13 @@ yyreduce:
     break;
 
   case 63:
-#line 938 "python.y"
+#line 979 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"Bit_Exp",0); 
-  add_child((yyval.ctype).node,(yyvsp[-2].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,"|",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"Add_Exp",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Bit_Exp",0); 
+  add_child($$.node,$1.node);
+  add_sibling($$.node,create_node(NULL,"|",0));
+  add_sibling($$.node,create_node(NULL,"Add_Exp",0));
+  add_child(end_node($$.node),$3.node);*/
 
 
   sprintf(temp_var,"t%d",tempno++);
@@ -2475,23 +2508,23 @@ yyreduce:
     break;
 
   case 64:
-#line 964 "python.y"
+#line 1005 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"Bit_Exp",0); 
-  add_child((yyval.ctype).node,(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Bit_Exp",0); 
+  add_child($$.node,$1.node);*/
 
   strcpy((yyval.ctype).code,(yyvsp[0].ctype).code);
 }
     break;
 
   case 65:
-#line 971 "python.y"
+#line 1012 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"Rel_Exp",0); 
-  add_child((yyval.ctype).node,(yyvsp[-2].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,">",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"Bit_Exp",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Rel_Exp",0); 
+  add_child($$.node,$1.node);
+  add_sibling($$.node,create_node(NULL,">",0));
+  add_sibling($$.node,create_node(NULL,"Bit_Exp",0));
+  add_child(end_node($$.node),$3.node);*/
 
   sprintf(temp_var,"t%d",tempno++);
   m = strlen(temp_var);
@@ -2504,13 +2537,13 @@ yyreduce:
     break;
 
   case 66:
-#line 987 "python.y"
+#line 1028 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"Rel_Exp",0); 
-  add_child((yyval.ctype).node,(yyvsp[-2].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,">=",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"Bit_Exp",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Rel_Exp",0); 
+  add_child($$.node,$1.node);
+  add_sibling($$.node,create_node(NULL,">=",0));
+  add_sibling($$.node,create_node(NULL,"Bit_Exp",0));
+  add_child(end_node($$.node),$3.node);*/
 
 
   sprintf(temp_var,"t%d",tempno++);
@@ -2524,13 +2557,13 @@ yyreduce:
     break;
 
   case 67:
-#line 1004 "python.y"
+#line 1045 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"Rel_Exp",0); 
-  add_child((yyval.ctype).node,(yyvsp[-2].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,"<",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"Bit_Exp",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Rel_Exp",0); 
+  add_child($$.node,$1.node);
+  add_sibling($$.node,create_node(NULL,"<",0));
+  add_sibling($$.node,create_node(NULL,"Bit_Exp",0));
+  add_child(end_node($$.node),$3.node);*/
 
   sprintf(temp_var,"t%d",tempno++);
   m = strlen(temp_var);
@@ -2543,13 +2576,13 @@ yyreduce:
     break;
 
   case 68:
-#line 1020 "python.y"
+#line 1061 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"Rel_Exp",0); 
-  add_child((yyval.ctype).node,(yyvsp[-2].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,"<=",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"Bit_Exp",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Rel_Exp",0); 
+  add_child($$.node,$1.node);
+  add_sibling($$.node,create_node(NULL,"<=",0));
+  add_sibling($$.node,create_node(NULL,"Bit_Exp",0));
+  add_child(end_node($$.node),$3.node);*/
 
   sprintf(temp_var,"t%d",tempno++);
   m = strlen(temp_var);
@@ -2562,23 +2595,23 @@ yyreduce:
     break;
 
   case 69:
-#line 1037 "python.y"
+#line 1078 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"Rel_Exp",0); 
-  add_child((yyval.ctype).node,(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Rel_Exp",0); 
+  add_child($$.node,$1.node);*/
 
   strcpy((yyval.ctype).code,(yyvsp[0].ctype).code);
 }
     break;
 
   case 70:
-#line 1044 "python.y"
+#line 1085 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"Eq_Exp",0); 
-  add_child((yyval.ctype).node,(yyvsp[-2].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,"==",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"Rel_Exp",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Eq_Exp",0); 
+  add_child($$.node,$1.node);
+  add_sibling($$.node,create_node(NULL,"==",0));
+  add_sibling($$.node,create_node(NULL,"Rel_Exp",0));
+  add_child(end_node($$.node),$3.node);*/
 
   sprintf(temp_var,"t%d",tempno++);
   m = strlen(temp_var);
@@ -2591,13 +2624,13 @@ yyreduce:
     break;
 
   case 71:
-#line 1060 "python.y"
+#line 1101 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"Eq_Exp",0); 
-  add_child((yyval.ctype).node,(yyvsp[-2].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,"!=",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"Rel_Exp",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Eq_Exp",0); 
+  add_child($$.node,$1.node);
+  add_sibling($$.node,create_node(NULL,"!=",0));
+  add_sibling($$.node,create_node(NULL,"Rel_Exp",0));
+  add_child(end_node($$.node),$3.node);*/
 
 
   sprintf(temp_var,"t%d",tempno++);
@@ -2611,69 +2644,69 @@ yyreduce:
     break;
 
   case 72:
-#line 1078 "python.y"
+#line 1119 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"Eq_Exp",0); 
-  add_child((yyval.ctype).node,(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Eq_Exp",0); 
+  add_child($$.node,$1.node);*/
 
   strcpy((yyval.ctype).code,(yyvsp[0].ctype).code);
 }
     break;
 
   case 73:
-#line 1085 "python.y"
+#line 1126 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"Eq_Exp",0); 
-  add_child((yyval.ctype).node,(yyvsp[-2].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,"in",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"In_Exp",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"Eq_Exp",0); 
+  add_child($$.node,$1.node);
+  add_sibling($$.node,create_node(NULL,"in",0));
+  add_sibling($$.node,create_node(NULL,"In_Exp",0));
+  add_child(end_node($$.node),$3.node);*/
 }
     break;
 
   case 74:
-#line 1094 "python.y"
+#line 1135 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"In_Exp",0); 
-  add_child((yyval.ctype).node,(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"In_Exp",0); 
+  add_child($$.node,$1.node);*/
 
   strcpy((yyval.ctype).code,(yyvsp[0].ctype).code);
 }
     break;
 
   case 75:
-#line 1101 "python.y"
+#line 1142 "python.y"
     {
-  (yyval.ctype).node = create_node(NULL,"In_Exp",0); 
-  add_child((yyval.ctype).node,(yyvsp[-2].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,"and",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"And_Exp",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"In_Exp",0); 
+  add_child($$.node,$1.node);
+  add_sibling($$.node,create_node(NULL,"and",0));
+  add_sibling($$.node,create_node(NULL,"And_Exp",0));
+  add_child(end_node($$.node),$3.node);*/
 
 
 }
     break;
 
   case 76:
-#line 1112 "python.y"
+#line 1153 "python.y"
     {
   (yyval.ctype)=(yyvsp[0].ctype);  
-  (yyval.ctype).node = create_node(NULL,"And_Exp",0); 
-  add_child((yyval.ctype).node,(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"And_Exp",0); 
+  add_child($$.node,$1.node);*/
 
   strcpy((yyval.ctype).code,(yyvsp[0].ctype).code);
 }
     break;
 
   case 77:
-#line 1120 "python.y"
+#line 1161 "python.y"
     {
   (yyval.ctype)=(yyvsp[-2].ctype);  
-  (yyval.ctype).node = create_node(NULL,"And_Exp",0); 
-  add_child((yyval.ctype).node,(yyvsp[-2].ctype).node);
-  add_sibling((yyval.ctype).node,create_node(NULL,"or",0));
-  add_sibling((yyval.ctype).node,create_node(NULL,"Or_Exp",0));
-  add_child(end_node((yyval.ctype).node),(yyvsp[0].ctype).node);
+  /*$$.node = create_node(NULL,"And_Exp",0); 
+  add_child($$.node,$1.node);
+  add_sibling($$.node,create_node(NULL,"or",0));
+  add_sibling($$.node,create_node(NULL,"Or_Exp",0));
+  add_child(end_node($$.node),$3.node);*/
 }
     break;
 
@@ -2682,7 +2715,7 @@ yyreduce:
     }
 
 /* Line 1126 of yacc.c.  */
-#line 2686 "y.tab.c"
+#line 2719 "y.tab.c"
 
   yyvsp -= yylen;
   yyssp -= yylen;
@@ -2950,7 +2983,7 @@ yyreturn:
 }
 
 
-#line 1130 "python.y"
+#line 1171 "python.y"
  
 int yyerror(char *msg) 
 { 
@@ -2965,9 +2998,10 @@ int main()
   head = tree_init();
   head->node = create_node(NULL,"Start",0);
   yyparse(); 
+  printf("Symbol Table");
   display_symbol();
-  printf("\n\nAbstract Syntax Tree\n\n");
-  printTree(head);
+  //printf("\n\nAbstract Syntax Tree\n\n");
+  //printTree(head);
   
 return 1;
 
