@@ -45,10 +45,10 @@ pop { ret_print("POP");   strcpy(yylval.val,yytext);return POP;}
 insert { ret_print("INSERT");   strcpy(yylval.val,yytext);return INSERT;}
 len { ret_print("LEN");   strcpy(yylval.val,yytext);return LEN;}
 range { ret_print("RANGE");  strcpy(yylval.val,yytext);return RANGE;}
-'>=' { ret_print("GE");  strcpy(yylval.val,yytext);return GE;}
-'<=' { ret_print("LE");  strcpy(yylval.val,yytext);return LE;}
-'==' { ret_print("EOP");  strcpy(yylval.val,yytext);return EOP;}
-'!=' { ret_print("NEOP");  strcpy(yylval.val,yytext);return NEOP;}
+>= { ret_print("GE");  strcpy(yylval.val,yytext);return GE;}
+\<= { ret_print("LE");  strcpy(yylval.val,yytext);return LE;}
+== { ret_print("EOP");  strcpy(yylval.val,yytext);return EOP;}
+\!= { ret_print("NEOP");  strcpy(yylval.val,yytext);return NEOP;}
 ; { ret_print("SEMI");  strcpy(yylval.val,yytext);return SEMI; }
 : { ret_print("COLON");  strcpy(yylval.val,yytext);return COLON; }
 , { ret_print("COMMA");  strcpy(yylval.val,yytext);return COMMA; }
