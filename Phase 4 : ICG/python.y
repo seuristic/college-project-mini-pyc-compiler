@@ -406,6 +406,12 @@ If_stmt: IF Exp COLON LBRACE Translation_unit RBRACE Elif_stmt Else_stmt
   add_child(end_node($$.node),$7.node);
   add_sibling($$.node,create_node(NULL,"Else_stmt",0));
   add_child(end_node($$.node),$8.node);
+
+  
+  strcpy($$.code,$2.code);
+  printf("code is:\n If False %s goto L%d",$$.code,ln++);
+  printf("Quadruple is:\n If False \t %s \t  \t L%d\n\n",$$.code,ln);
+
 }
 ;
 Elif_stmt: ELIF Exp COLON LBRACE Translation_unit RBRACE Elif_stmt
@@ -448,6 +454,9 @@ While_stmt: WHILE Exp COLON LBRACE Translation_unit RBRACE
   printf("code is : \nL%d:\n", ln);
   printf("Quadruple is:\n \tLabel\t  \t L%d\n\n", ln); //quad format: op =label a1=null a2=null res=l<ln>
   ln++;
+  strcpy($$.code,$2.code);
+  printf("code is If False %s goto L%d\n",$$.code,ln);
+  printf("code is : \nL%d:\n", ln);
 }
 ;
 For_stmt: FOR ID IN Iterable COLON LBRACE Translation_unit RBRACE 
@@ -473,6 +482,10 @@ For_stmt: FOR ID IN Iterable COLON LBRACE Translation_unit RBRACE
   printf("code is : \nL%d:\n", ln);
   printf("Quadruple is:\n \tLabel\t\  \t L%d\n\n", ln); //quad format: op =label a1=null a2=null res=l<ln>
   ln++;
+
+  strcpy($$.code,$2.code);
+  printf("code is If False %s goto L%d\n",$$.code,ln);
+  printf("code is : \nL%d:\n", ln);
 }
 ;
 Iterable: LBRACKET Param_list RBRACKET  
