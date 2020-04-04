@@ -454,8 +454,15 @@ Elif_stmt: ELIF Exp COLON LBRACE Translation_unit RBRACE Elif_stmt
   add_sibling($$.node,create_node(NULL,"}",0));
   add_sibling($$.node,create_node(NULL,"Elif_stmt",0));
   add_child(end_node($$.node),$7.node);*/
+  int l=ln;
+  ln++;
+  printf("code is:\n L%d\n",l);
+  printf("Quadruple is Label \t \t L%d\n\n",l);
 } 
-| {}
+| {int l=ln;
+  ln++;
+  printf("code is:\n L%d\n",l);
+  printf("Quadruple is Label \t \t L%d\n\n",l);}
 ;
 Else_stmt: ELSE COLON LBRACE Translation_unit RBRACE
 {
@@ -465,8 +472,16 @@ Else_stmt: ELSE COLON LBRACE Translation_unit RBRACE
   add_sibling($$.node,create_node(NULL,"Translation_unit",0));
   add_child(end_node($$.node),$4.node);
   add_sibling($$.node,create_node(NULL,"}",0));*/
+
+  int l=ln;
+  ln++;
+  printf("code is:\n L%d\n",l);
+  printf("Quadruple is Label \t \t L%d\n\n",l);
 } 
-| {}
+| {int l=ln;
+  ln++;
+  printf("code is:\n L%d\n",l);
+  printf("Quadruple is Label \t \t L%d\n\n",l);}
 ;
 While_stmt: WHILE Exp COLON LBRACE Translation_unit RBRACE 
 {
