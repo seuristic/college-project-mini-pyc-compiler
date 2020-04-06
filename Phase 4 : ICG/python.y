@@ -357,7 +357,7 @@ Assignment_stmt: ID ASOP Exp
   {
   if (unop==0)
     {sprintf($$.code,"%s = %s",$1.value,$3.code);
-    printf("code is %s\n",$$.code);
+    printf("code is:\n %s\n",$$.code);
 
     //printf("code is :\n %s = t%d\n",$1.value,--tempno);
     printf("Quadruple is:\n");
@@ -366,7 +366,7 @@ Assignment_stmt: ID ASOP Exp
   else if(unop==1)
     {
     sprintf($$.code,"%s = - %s",$1.value,$3.code);
-    printf("code is %s\n",$$.code);
+    printf("code is :\n%s\n",$$.code);
 
     //printf("code is : \n%s = t%d\n",$1.value,--tempno);
     printf("Quadruple is:\n");
@@ -376,7 +376,7 @@ Assignment_stmt: ID ASOP Exp
     else if(unop==2)
     {
     sprintf($$.code,"%s = not %s",$1.value,$3.code);
-    printf("code is %s\n",$$.code);
+    printf("code is: \n %s\n",$$.code);
 
     //printf("code is : \n%s = t%d\n",$1.value,--tempno);
     printf("Quadruple is:\n");
