@@ -10,6 +10,7 @@
 FILE *fp_icg, *fp_quad;
 char temp_var[100];
 int m = 0;        //string length for temp_var
+int unop =0;
 
 typedef struct Node
 {
@@ -350,6 +351,37 @@ Assignment_stmt: ID ASOP Exp
   printf("= \t t%d \t   \t%s\n\n",tempno,$1.value);
   
   
+
+  }
+  else if(exprno==2)
+  {
+  if (unop==0)
+    {sprintf($$.code,"%s = %s",$1.value,$3.code);
+    printf("code is %s\n",$$.code);
+
+    //printf("code is :\n %s = t%d\n",$1.value,--tempno);
+    printf("Quadruple is:\n");
+    printf("= \t %s \t  \t %s",$3.code,$1.value);
+    }
+  else if(unop==1)
+    {
+    sprintf($$.code,"%s = - %s",$1.value,$3.code);
+    printf("code is %s\n",$$.code);
+
+    //printf("code is : \n%s = t%d\n",$1.value,--tempno);
+    printf("Quadruple is:\n");
+    printf("- \t %s \t  \t %s",$3.code,$1.value);
+    }
+
+    else if(unop==2)
+    {
+    sprintf($$.code,"%s = not %s",$1.value,$3.code);
+    printf("code is %s\n",$$.code);
+
+    //printf("code is : \n%s = t%d\n",$1.value,--tempno);
+    printf("Quadruple is:\n");
+    printf("not \t %s \t  \t %s",$3.code,$1.value);
+    }
 
   }
 
@@ -743,13 +775,45 @@ Unary_Exp: SUB Primary_Exp
   /*$$.node = create_node(NULL,"-",0); 
   add_sibling($$.node,create_node(NULL,"Primary_Exp",0));
   add_child(end_node($$.node),$2.node);*/
+
+  strcpy($$.code,$2.lhs);
+  //printf("hi %s",$2.lhs);
+  //sprintf($$.lhs,"%s",$1);
+  exprno=2;
+  unop=1;
 }
 | ADD Primary_Exp 
 {
-  $$=$2;
+  //$$=$2;
   /*$$.node = create_node(NULL,"+",0); 
-  add_sibling($$.node,create_node(NULL,"Primary_Exp",0));
-  add_child(end_node($$.node),$2.node);*/
+  //add_sibling($$.node,create_node(NULL,"Primary_Exp",0));
+  //add_child(end_node($$.node),$2.node);*/
+
+  //strcpy($$.code,$2.code);
+
+  strcpy($$.code,$2.lhs);
+  //printf("hi %s",$2.lhs);
+  //sprintf($$.lhs,"%s",$1);
+  exprno=2;
+  unop=0;
+  //tempno++;
+
+  /*tempno++;
+  sprintf(temp_var,"t%d",tempno++);
+  m = strlen(temp_var);
+  temp_var[m] = '\0';
+
+  //sprintf($$.lhs,temp_var);
+  sprintf($$.code,"%s = %s ",$$.lhs,$2.lhs);
+
+  printf("\ncode is %s\n",$$.code);
+
+  printf("Quadruple is :\n");
+  printf("Uplus \t %s \t  \t %s \n\n",$2.lhs,$$.lhs);*/
+
+  
+  exprno=2;
+
 }
 | NOT Primary_Exp 
 {
@@ -760,6 +824,13 @@ Unary_Exp: SUB Primary_Exp
   /*$$.node = create_node(NULL,"!",0); 
   add_sibling($$.node,create_node(NULL,"Primary_Exp",0));
   add_child(end_node($$.node),$$.node);*/
+  
+  strcpy($$.code,$2.lhs);
+  //printf("hi %s",$2.lhs);
+  //sprintf($$.lhs,"%s",$1);
+  exprno=2;
+  unop=2;
+
 }
 | Primary_Exp 
 {
