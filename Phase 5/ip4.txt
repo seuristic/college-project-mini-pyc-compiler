@@ -1,0 +1,9 @@
+=	2		a
+==	a	2	t2
+==	t2	2	t0
+if	t0		L0
+=	3		a
+Label			L0
+=	5		b
+=	5		b
++	a	2	t0

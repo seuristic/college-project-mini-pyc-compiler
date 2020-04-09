@@ -93,7 +93,24 @@ print(lines)
 """
 
 def dead_code_elimination():
-    #must complete it
+    flag=None
+    for i in range(len(lines)):
+        for j in range(i+1,len(lines)):
+            if j>=len(lines):
+                break
+            #print(i,j)
+            #print(lines)
+            #print(flag)
+            if(lines[j][0] == 'Label' and lines[j][3] == flag):
+                flag=None
+            if flag!=None:
+                continue
+            if(lines[j][0] == 'if' or lines[j][0] == 'ifFalse'):
+                flag=lines[j][3]
+            if(lines[i][3] == lines[j][1]):
+                break
+            if(lines[i][0]=="=" and lines[j][0]=="=" and lines[i][3] == lines[j][3]):
+                del lines[i]
     return 1
 
 changed=1
