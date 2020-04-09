@@ -289,7 +289,7 @@ Print_stmt: PRINT LPAREN Param_list RPAREN
 ;
 Param_list: Param_list COMMA Exp  
 {
-  $$.type=50+$1.type;strcat($$.value,",");
+  $$.type=50+$3.type;strcat($$.value,",");
   strcat($$.value,$3.value);
   $$.node = create_node(NULL,"Param_list",0);
   add_child(end_node($$.node),$1.node);
