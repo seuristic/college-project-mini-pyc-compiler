@@ -15,7 +15,7 @@ is_bool = lambda x: x=="True" or x=="False"
 
 is_const = lambda x: is_int(x) or is_bool(x) or is_float(x) or is_str(x)
 
-operators={'+','-','*','/','//','%','in','and','or','|','&','**','^','not','>>','<<'}
+operators={'+','-','*','/','//','%','in','and','or','|','&','**','^','not','>>','<<',"==","!=",">","<",">=","<="}
 
 for line in stdin:
     lines.append(line.strip().split("\t"))
@@ -57,6 +57,13 @@ def constant_propagation():
             if lines[i][2] in d:
                 changed=1
                 lines[i][2]=d[lines[i][2]]
+
+        if lines[i][0]=='if' or lines[i][0]=='ifFalse':
+            d={}
+
+        if lines[i][0]=='Label':
+            d={}
+
     
     return changed
         
@@ -83,6 +90,12 @@ def copy_propagation():
             if lines[i][2] in d:
                 changed=1
                 lines[i][2]=d[lines[i][2]]
+        
+        if lines[i][0]=='if' or lines[i][0]=='ifFalse':
+            d={}
+
+        if lines[i][0]=='Label':
+            d={}
     
     return changed
         
@@ -122,6 +135,14 @@ while changed:
     #break
 
 dead_code_elimination()
+
+changed=1 #after dead_code_elimination, we can still do some constant folding, propagation because, some loop blocks like elif and else can sometimes be eliminated. So can evaluate the expressions, propagate contstants,etc
+while changed:
+    c1=constant_folding()
+    c2=constant_propagation()
+    c3=copy_propagation()
+    changed=c1 or c2 or c3
+
 
 print("after optimization")
 print(lines)
