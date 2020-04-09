@@ -107,13 +107,34 @@ print(lines)
 
 def dead_code_elimination():
     flag=None
+    i=0
+    while i<len(lines):
+        #print(i,flag)
+        #print(lines)
+
+        if lines[i][3] == flag:
+            del lines[i]
+            flag=None
+
+        if((lines[i][0] == 'if' and lines[i][1]=='False') or (lines[i][0] == 'ifFalse' and lines[i][1]=='True')):
+            while lines[i][0] != 'Label':
+                del lines[i]
+            del lines[i]
+
+        if((lines[i][0] == 'if' and lines[i][1]=='True') or (lines[i][0] == 'ifFalse' and lines[i][1]=='False')):
+            flag=lines[i][3]
+            del lines[i]
+            
+        i=i+1
+
     for i in range(len(lines)):
         for j in range(i+1,len(lines)):
             if j>=len(lines):
                 break
             #print(i,j)
-            #print(lines)
-            #print(flag)
+            #print(lines[i],lines[j])
+            #print(flag,delete)
+            
             if(lines[j][0] == 'Label' and lines[j][3] == flag):
                 flag=None
             if flag!=None:
@@ -124,6 +145,7 @@ def dead_code_elimination():
                 break
             if(lines[i][0]=="=" and lines[j][0]=="=" and lines[i][3] == lines[j][3]):
                 del lines[i]
+
     return 1
 
 changed=1

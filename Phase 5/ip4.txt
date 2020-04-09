@@ -1,6 +1,6 @@
 =	2		a
 ==	a	2	t2
-==	t2	2	t0
+==	t2	False	t0
 if	t0		L0
 =	3		a
 +	3	4	a
