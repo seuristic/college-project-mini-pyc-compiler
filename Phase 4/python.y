@@ -268,7 +268,7 @@ int exprno = -1; //expr no
 
 %} 
 
-%union{ struct{char value[1024]; int type;struct Node *node;char lhs[1024]  ;char code[1024]}ctype; char val[1024]; };
+%union{ struct{char value[1024]; int type;struct Node *node;char lhs[1024]  ; char place[1024]; char code[1024]; char begin[1024]; char end[1024];}ctype; char val[1024]; };
 %token DOT LINE FALSE NONE TRUE LAND BREAK CONTINUE ELIF DEL ELSE FOR IF IN NOT LOR WHILE INPUT PRINT INT FLOAT STR LIST SPLIT MAP APPEND POP INSERT LEN ID CINT CFLOAT SEMI COMMA CSTR EPOP MUL DIV FDIV MOD ADD SUB ASOP G L GE LE EOP NEOP XOR BAND BOR LBRACE RBRACE LPAREN RPAREN LBRACKET RBRACKET RANGE COLON
 %type <ctype> Exp Const Or_Exp And_Exp In_Exp Eq_Exp Rel_Exp Bit_Exp Add_Exp Mul_Exp Pow_Exp Unary_Exp Primary_Exp ID Iterable Param_list Translation_unit Stmt Assignment_stmt Simple_stmt Compound_stmt Jump_stmt Print_stmt If_stmt Elif_stmt Else_stmt While_stmt For_stmt Expression_stmt Start
 %type<val> DOT LINE FALSE NONE TRUE LAND BREAK CONTINUE ELIF DEL ELSE FOR IF IN NOT LOR WHILE INPUT PRINT INT FLOAT STR LIST SPLIT MAP APPEND POP INSERT LEN  CINT CFLOAT SEMI COMMA CSTR EPOP MUL DIV FDIV MOD ADD SUB ASOP G L GE LE EOP NEOP XOR BAND BOR LBRACE RBRACE LPAREN RPAREN LBRACKET RBRACKET RANGE COLON 
@@ -285,11 +285,13 @@ Translation_unit: Stmt Translation_unit
   add_child(end_node($$.node),$1.node);
   add_sibling($$.node,create_node(NULL,"Translation_unit",0));
   add_child(end_node($$.node),$2.node);*/
+  //strcpy($$.code,$1.code)
 }
 | Stmt
 {
   /*$$.node = create_node(NULL,"Stmt",0);
   add_child(end_node($$.node),$1.node);*/
+  //strcpy($$.code,$1.code);
 }
 ;
 Stmt: Simple_stmt SEMI 
@@ -297,6 +299,7 @@ Stmt: Simple_stmt SEMI
   /*$$.node=create_node(NULL,"Simple_stmt",0);
   add_child($$.node,$1.node);
   add_sibling($$.node,create_node(NULL,";",0));*/
+  strcpy($$.code,$1.code);
 }
 | Compound_stmt 
 {
@@ -308,6 +311,7 @@ Stmt: Simple_stmt SEMI
   /*$$.node=create_node(NULL,"Assignment_stmt",0);
   add_child($$.node,$1.node);
   add_sibling($$.node,create_node(NULL,";",0));*/
+  strcpy($$.code,$1.code);
 }
 ;
 Assignment_stmt: ID ASOP Exp 
@@ -526,12 +530,17 @@ While_stmt: WHILE Exp COLON LBRACE Translation_unit RBRACE
   add_child(end_node($$.node),$5.node);
   add_sibling($$.node,create_node(NULL,"}",0));*/
 
-  printf("code is : \nL%d:\n", ln);
+  sprintf($$.begin,"L%d",ln++);
+  sprintf($$.end,"L%d",ln);
+
+  sprintf($$.code,"%s:\n %s \n IFFALSE %s goto %s\n %s\n goto %s\n %s: \n",$$.begin,$2.code,$2.lhs,$$.end,$5.code,$$.begin,$$.end);
+  printf("%s",$$.code);
+  /*printf("code is : \nL%d:\n", ln);
   printf("Quadruple is:\n \tLabel\t  \t L%d\n\n", ln); //quad format: op =label a1=null a2=null res=l<ln>
   ln++;
   strcpy($$.code,$2.code);
   printf("code is If False %s goto L%d\n",$$.code,ln);
-  printf("code is : \nL%d:\n", ln);
+  printf("code is : \nL%d:\n", ln);*/
 }
 ;
 For_stmt: FOR ID IN Iterable COLON LBRACE Translation_unit RBRACE 
@@ -1146,10 +1155,11 @@ Rel_Exp: Bit_Exp
   sprintf(temp_var,"t%d",tempno++);
   m = strlen(temp_var);
   temp_var[m] = '\0';
-  printf("code is:\n %s = %s < %s\n",temp_var, $1.code, $3.code);
-  printf("Quadruple is : \n \t<\t\t%s\t\t%s\t\t%s\n\n", $1.code, $3.code, temp_var);
+  //printf("code is:\n %s = %s < %s\n",temp_var, $1.code, $3.code);
+  //printf("Quadruple is : \n \t<\t\t%s\t\t%s\t\t%s\n\n", $1.code, $3.code, temp_var);
 
-  strncpy($$.code, temp_var, m+1);
+  sprintf($$.code,"%s = %s < %s\n",temp_var, $1.code, $3.code);
+  strncpy($$.lhs, temp_var, m+1);
 }
 | Rel_Exp LE Bit_Exp
 {
