@@ -285,13 +285,15 @@ Translation_unit: Stmt Translation_unit
   add_child(end_node($$.node),$1.node);
   add_sibling($$.node,create_node(NULL,"Translation_unit",0));
   add_child(end_node($$.node),$2.node);*/
-  //strcpy($$.code,$1.code)
+  sprintf($$.code,"%s\n %s",$1.code,$2.code);
+  //printf("CODE from translation is:\n\n",$$.code);
 }
 | Stmt
 {
   /*$$.node = create_node(NULL,"Stmt",0);
   add_child(end_node($$.node),$1.node);*/
-  //strcpy($$.code,$1.code);
+  strcpy($$.code,$1.code);
+  printf("code from stmt  %s\n",$$.code);
 }
 ;
 Stmt: Simple_stmt SEMI 
@@ -300,18 +302,21 @@ Stmt: Simple_stmt SEMI
   add_child($$.node,$1.node);
   add_sibling($$.node,create_node(NULL,";",0));*/
   strcpy($$.code,$1.code);
+  
 }
 | Compound_stmt 
 {
   /*$$.node=create_node(NULL,"Compound_stmt",0);
   add_child($$.node,$1.node);*/
+  strcpy($$.code,$1.code);
 }
 | Assignment_stmt SEMI 
 {
+  strcpy($$.code,$1.code);
   /*$$.node=create_node(NULL,"Assignment_stmt",0);
   add_child($$.node,$1.node);
   add_sibling($$.node,create_node(NULL,";",0));*/
-  strcpy($$.code,$1.code);
+  
 }
 ;
 Assignment_stmt: ID ASOP Exp 
@@ -472,9 +477,14 @@ If_stmt: IF Exp COLON LBRACE Translation_unit RBRACE Elif_stmt Else_stmt
   add_child(end_node($$.node),$8.node);*/
 
   
-  strcpy($$.code,$2.code);
-  printf("code is:\n If False %s goto L%d\n",$$.code,ln++);
-  printf("Quadruple is:\n If False \t %s \t  \t L%d\n\n",$$.code,ln);
+  //strcpy($$.code,$2.code);
+  //printf("code is:\n If False %s goto L%d\n",$$.code,ln++);
+  //printf("Quadruple is:\n If False \t %s \t  \t L%d\n\n",$$.code,ln);
+
+  sprintf($$.begin,"L%d",ln++);
+  sprintf($$.end,"L%d",ln++);
+  sprintf($$.code,"%s:\n IFFALSE %s goto %s\n %s\n goto %s\n %s:\n",$$.begin,$2.lhs,$$.end,$5.code,$$.end,$$.end);
+  printf("code is:\n%s",$$.code);
 
 }
 ;
@@ -490,15 +500,26 @@ Elif_stmt: ELIF Exp COLON LBRACE Translation_unit RBRACE Elif_stmt
   add_sibling($$.node,create_node(NULL,"}",0));
   add_sibling($$.node,create_node(NULL,"Elif_stmt",0));
   add_child(end_node($$.node),$7.node);*/
-  int l=ln;
+  /*int l=ln;
+  ln++;
+  printf("code is:\n L%d\n",l);
+  printf("Quadruple is Label \t \t L%d\n\n",l);*/
+
+  sprintf($$.begin,"L%d",ln++);
+  sprintf($$.end,"L%d",ln++);
+  sprintf($$.code,"%s:\n IFFALSE %s goto %s\n %s\n goto %s\n",$$.begin,$2.lhs,$$.end,$5.code,$$.end);
+  printf("code is:\n%s",$$.code);
+} 
+| {
+  /*int l=ln;
   ln++;
   printf("code is:\n L%d\n",l);
   printf("Quadruple is Label \t \t L%d\n\n",l);
-} 
-| {int l=ln;
-  ln++;
-  printf("code is:\n L%d\n",l);
-  printf("Quadruple is Label \t \t L%d\n\n",l);}
+  */
+  //strcpy()
+  
+
+  }
 ;
 Else_stmt: ELSE COLON LBRACE Translation_unit RBRACE
 {
@@ -514,10 +535,14 @@ Else_stmt: ELSE COLON LBRACE Translation_unit RBRACE
   printf("code is:\n L%d\n",l);
   printf("Quadruple is Label \t \t L%d\n\n",l);
 } 
-| {int l=ln;
+| {
+  /*int l=ln;
   ln++;
   printf("code is:\n L%d\n",l);
-  printf("Quadruple is Label \t \t L%d\n\n",l);}
+  printf("Quadruple is Label \t \t L%d\n\n",l);
+  */
+  
+  }
 ;
 While_stmt: WHILE Exp COLON LBRACE Translation_unit RBRACE 
 {
@@ -531,7 +556,7 @@ While_stmt: WHILE Exp COLON LBRACE Translation_unit RBRACE
   add_sibling($$.node,create_node(NULL,"}",0));*/
 
   sprintf($$.begin,"L%d",ln++);
-  sprintf($$.end,"L%d",ln);
+  sprintf($$.end,"L%d",ln++);
 
   sprintf($$.code,"%s:\n %s \n IFFALSE %s goto %s\n %s\n goto %s\n %s: \n",$$.begin,$2.code,$2.lhs,$$.end,$5.code,$$.begin,$$.end);
   printf("%s",$$.code);
