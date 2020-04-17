@@ -11,6 +11,7 @@ FILE *fp_icg, *fp_quad;
 char temp_var[100];
 int m = 0;        //string length for temp_var
 int unop =0;
+int paramno=0;
 
 typedef struct Node
 {
@@ -392,6 +393,7 @@ Simple_stmt: Expression_stmt
 }
 | Print_stmt 
 {
+  paramno=0;
   //$$.node=create_node(NULL,"Print_stmt",0);add_child($$.node,$1.node);
 }
 | Jump_stmt 
@@ -431,6 +433,7 @@ Print_stmt: PRINT LPAREN Param_list RPAREN
   add_sibling($$.node,create_node(NULL,"(",0));
   add_sibling($$.node,$3.node);
   add_sibling($$.node,create_node(NULL,")",0));*/
+  printf("call\t \tprint\t%d\n",paramno);
 }
 ;
 Param_list: Param_list COMMA Exp  
@@ -442,11 +445,20 @@ Param_list: Param_list COMMA Exp
   add_sibling($$.node,create_node(NULL,",",0));
   add_sibling($$.node,create_node(NULL,"EXP",0));
   add_child(end_node($$.node),$3.node);*/
+
+  sprintf($$.lhs,$1.lhs);
+  printf("param\t \t%s\n",$3.lhs);
+  paramno++;
 }
 | Exp 
 {  
   /*$$.node = create_node(NULL,"EXP",0);
   add_child(end_node($$.node),$1.node);*/
+  strcpy($$.code,$1.code);
+  sprintf($$.lhs,$1.lhs);
+  printf("param\t \t%s\n",$1.lhs);
+  paramno++;
+
 
 
 } 
