@@ -47,7 +47,9 @@ def constant_propagation():
         if lines[i][0]=='=' and is_const(lines[i][1]) :
             d[lines[i][-1]]=lines[i][1]
             continue
-
+        if lines[i][0]=='if' or lines[i][0]=='ifFalse':
+            d={}
+            continue
         if is_variable(lines[i][1]):
             if lines[i][1] in d:
                 changed=1
@@ -57,9 +59,6 @@ def constant_propagation():
             if lines[i][2] in d:
                 changed=1
                 lines[i][2]=d[lines[i][2]]
-
-        if lines[i][0]=='if' or lines[i][0]=='ifFalse':
-            d={}
 
         if lines[i][0]=='Label':
             d={}
@@ -80,6 +79,10 @@ def copy_propagation():
         if lines[i][0]=='=' and is_variable(lines[i][1]) and lines[i][2]==' ' :
             d[lines[i][-1]]=lines[i][1]
             continue
+        
+        if lines[i][0]=='if' or lines[i][0]=='ifFalse':
+            d={}
+            continue
 
         if is_variable(lines[i][1]):
             if lines[i][1] in d:
@@ -90,9 +93,6 @@ def copy_propagation():
             if lines[i][2] in d:
                 changed=1
                 lines[i][2]=d[lines[i][2]]
-        
-        if lines[i][0]=='if' or lines[i][0]=='ifFalse':
-            d={}
 
         if lines[i][0]=='Label':
             d={}
