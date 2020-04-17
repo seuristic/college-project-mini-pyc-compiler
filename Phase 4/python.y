@@ -11,6 +11,7 @@ FILE *fp_icg, *fp_quad;
 char temp_var[100];
 int m = 0;        //string length for temp_var
 int unop =0;
+int paramno=0;
 
 typedef struct Node
 {
@@ -285,15 +286,17 @@ Translation_unit: Stmt Translation_unit
   add_child(end_node($$.node),$1.node);
   add_sibling($$.node,create_node(NULL,"Translation_unit",0));
   add_child(end_node($$.node),$2.node);*/
-  sprintf($$.code,"%s\n %s",$1.code,$2.code);
-  //printf("CODE from translation is:\n\n",$$.code);
+  
+  sprintf($$.code,"%s\n",$1.code);
+  printf(">>\n\n",$$.code);
 }
 | Stmt
 {
   /*$$.node = create_node(NULL,"Stmt",0);
   add_child(end_node($$.node),$1.node);*/
   strcpy($$.code,$1.code);
-  printf("code from stmt  %s\n",$$.code);
+  strcpy($$.lhs,$1.lhs);
+  //printf("code from stmt  %s\n",$$.code);
 }
 ;
 Stmt: Simple_stmt SEMI 
@@ -302,6 +305,7 @@ Stmt: Simple_stmt SEMI
   add_child($$.node,$1.node);
   add_sibling($$.node,create_node(NULL,";",0));*/
   strcpy($$.code,$1.code);
+  //printf("simple stmt:\n%s",$$.code);
   
 }
 | Compound_stmt 
@@ -309,13 +313,16 @@ Stmt: Simple_stmt SEMI
   /*$$.node=create_node(NULL,"Compound_stmt",0);
   add_child($$.node,$1.node);*/
   strcpy($$.code,$1.code);
+  printf("cpmd stmt:\n%s",$$.code);
 }
 | Assignment_stmt SEMI 
 {
   strcpy($$.code,$1.code);
+  //printf("agn stmt:\n",$$.code);
   /*$$.node=create_node(NULL,"Assignment_stmt",0);
   add_child($$.node,$1.node);
   add_sibling($$.node,create_node(NULL,";",0));*/
+
   
 }
 ;
@@ -337,9 +344,9 @@ Assignment_stmt: ID ASOP Exp
     //printf("op \t arg1 \t arg2 \t res \n");
     //printf("-----------------------------------------------------\n");
 
-    printf("code is: %s = %s \n",$1.value,$3.code);
-    printf("Quadruple is:\n");
-    printf("= \t %s \t   \t%s\n\n",$3.code,$1.value);
+    //printf("code is: %s = %s \n",$1.value,$3.code);
+    //printf("Quadruple is:\n");
+    //printf("= \t %s \t   \t%s\n\n",$3.code,$1.value);
 
     sprintf($$.code,"%s = %s",$1.value,$3.code);
     //printf("0code is %s",$$.code);
@@ -355,53 +362,58 @@ Assignment_stmt: ID ASOP Exp
   sprintf($$.code,"%s",$3.code);
   //printf("code is %s\n",$$.code);
 
-  printf("code is %s = t%d\n",$1.value,--tempno);
-  printf("Quadruple is:\n");
-  printf("= \t t%d \t   \t%s\n\n",tempno,$1.value);
+  //printf("code is %s = t%d\n",$1.value,--tempno);
+  //printf("Quadruple is:\n");
+  //printf("= \t t%d \t   \t%s\n\n",tempno,$1.value);
   
+
+  //sprintf($$.code,"%s = t%d\n",$1.value,--tempno);
   
 
   }
   else if(exprno==2)
   {
   if (unop==0)
-    {sprintf($$.code,"%s = %s",$1.value,$3.code);
-    printf("code is:\n %s\n",$$.code);
+    {
+    sprintf($$.code,"%s = %s",$1.value,$3.code);
+    //printf("code is:\n %s\n",$$.code);
 
-    //printf("code is :\n %s = t%d\n",$1.value,--tempno);
-    printf("Quadruple is:\n");
-    printf("= \t %s \t  \t %s",$3.code,$1.value);
+    //printf("Quadruple is:\n");
+    //printf("= \t %s \t  \t %s",$3.code,$1.value);
     }
   else if(unop==1)
     {
     sprintf($$.code,"%s = - %s",$1.value,$3.code);
-    printf("code is :\n%s\n",$$.code);
+    //printf("code is :\n%s\n",$$.code);
 
-    //printf("code is : \n%s = t%d\n",$1.value,--tempno);
-    printf("Quadruple is:\n");
-    printf("- \t %s \t  \t %s",$3.code,$1.value);
+   
+    //printf("Quadruple is:\n");
+    //printf("- \t %s \t  \t %s",$3.code,$1.value);
     }
 
     else if(unop==2)
     {
     sprintf($$.code,"%s = not %s",$1.value,$3.code);
-    printf("code is: \n %s\n",$$.code);
+    //printf("code is: \n %s\n",$$.code);
 
-    //printf("code is : \n%s = t%d\n",$1.value,--tempno);
-    printf("Quadruple is:\n");
-    printf("not \t %s \t  \t %s",$3.code,$1.value);
+    
+    //printf("Quadruple is:\n");
+    //printf("not \t %s \t  \t %s",$3.code,$1.value);
     }
 
   }
+  printf("%s\n",$$.code);
 
 
 }
 Simple_stmt: Expression_stmt 
 {
   //$$.node=create_node(NULL,"Expression_stmt",0);add_child($$.node,$1.node);
+  strcpy($$.code,$1.code);
 }
 | Print_stmt 
 {
+	paramno=0;
   //$$.node=create_node(NULL,"Print_stmt",0);add_child($$.node,$1.node);
 }
 | Jump_stmt 
@@ -413,11 +425,13 @@ Simple_stmt: Expression_stmt
 Compound_stmt: If_stmt 
 {
   //$$.node=create_node(NULL,"If_stmt",0);add_child($$.node,$1.node);
+  strcpy($$.code,$1.code);
 }
 | While_stmt 
 {
   
   //$$.node=create_node(NULL,"While_stmt",0);add_child($$.node,$1.node);
+  strcpy($$.code,$1.code);
 }
 | For_stmt 
 {
@@ -441,6 +455,7 @@ Print_stmt: PRINT LPAREN Param_list RPAREN
   add_sibling($$.node,create_node(NULL,"(",0));
   add_sibling($$.node,$3.node);
   add_sibling($$.node,create_node(NULL,")",0));*/
+  printf("call (print,%d)\n",paramno);
 }
 ;
 Param_list: Param_list COMMA Exp  
@@ -452,11 +467,18 @@ Param_list: Param_list COMMA Exp
   add_sibling($$.node,create_node(NULL,",",0));
   add_sibling($$.node,create_node(NULL,"EXP",0));
   add_child(end_node($$.node),$3.node);*/
+  sprintf($$.lhs,$1.lhs);
+  printf("param %s\n",$3.lhs);
+  paramno++;
 }
 | Exp 
 {  
   /*$$.node = create_node(NULL,"EXP",0);
   add_child(end_node($$.node),$1.node);*/
+  strcpy($$.code,$1.code);
+  sprintf($$.lhs,$1.lhs);
+  printf("param %s\n",$1.lhs);
+  paramno++;
 
 
 } 
@@ -484,7 +506,7 @@ If_stmt: IF Exp COLON LBRACE Translation_unit RBRACE Elif_stmt Else_stmt
   sprintf($$.begin,"L%d",ln++);
   sprintf($$.end,"L%d",ln++);
   sprintf($$.code,"%s:\n IFFALSE %s goto %s\n %s\n goto %s\n %s:\n",$$.begin,$2.lhs,$$.end,$5.code,$$.end,$$.end);
-  printf("code is:\n%s",$$.code);
+  //printf("code is:\n%s",$$.code);
 
 }
 ;
@@ -508,7 +530,7 @@ Elif_stmt: ELIF Exp COLON LBRACE Translation_unit RBRACE Elif_stmt
   sprintf($$.begin,"L%d",ln++);
   sprintf($$.end,"L%d",ln++);
   sprintf($$.code,"%s:\n IFFALSE %s goto %s\n %s\n goto %s\n",$$.begin,$2.lhs,$$.end,$5.code,$$.end);
-  printf("code is:\n%s",$$.code);
+  //printf("code is:\n%s",$$.code);
 } 
 | {
   /*int l=ln;
@@ -530,11 +552,16 @@ Else_stmt: ELSE COLON LBRACE Translation_unit RBRACE
   add_child(end_node($$.node),$4.node);
   add_sibling($$.node,create_node(NULL,"}",0));*/
 
-  int l=ln;
+  /*int l=ln;
   ln++;
   printf("code is:\n L%d\n",l);
-  printf("Quadruple is Label \t \t L%d\n\n",l);
+  printf("Quadruple is Label \t \t L%d\n\n",l);*/
+
+  sprintf($$.end,"L%d",ln++);
+  sprintf($$.code,"%s goto %s\n %s\n goto %s\n",$4.code,$$.end);
+  //printf("code is:\n%s",$$.code);
 } 
+
 | {
   /*int l=ln;
   ln++;
@@ -559,7 +586,7 @@ While_stmt: WHILE Exp COLON LBRACE Translation_unit RBRACE
   sprintf($$.end,"L%d",ln++);
 
   sprintf($$.code,"%s:\n %s \n IFFALSE %s goto %s\n %s\n goto %s\n %s: \n",$$.begin,$2.code,$2.lhs,$$.end,$5.code,$$.begin,$$.end);
-  printf("%s",$$.code);
+  //printf("%s",$$.code);
   /*printf("code is : \nL%d:\n", ln);
   printf("Quadruple is:\n \tLabel\t  \t L%d\n\n", ln); //quad format: op =label a1=null a2=null res=l<ln>
   ln++;
@@ -756,7 +783,7 @@ Primary_Exp: ID
   add_sibling($$.node,create_node(NULL,")",0));*/
 
   strcpy($$.code,$2.code);
-  sprintf($$.lhs,"%s",temp_var);
+  sprintf($$.lhs,"%s",$2.lhs);
   exprno=1;
 }
 | Iterable 
@@ -1010,7 +1037,7 @@ Add_Exp: Mul_Exp
   temp_var[m] = '\0';
 
   sprintf($$.lhs,temp_var);
-  sprintf($$.code,"%s = %s + %s",temp_var,$1.lhs,$3.code);
+  sprintf($$.code,"%s = %s + %s",temp_var,$1.lhs,$3.lhs);
 
   printf("\ncode is %s\n",$$.code);
 
@@ -1034,12 +1061,12 @@ Add_Exp: Mul_Exp
   temp_var[m] = '\0';
 
   sprintf($$.lhs,temp_var);
-  sprintf($$.code,"%s = %s - %s",temp_var,$1.lhs,$3.code);
+  sprintf($$.code,"%s = %s - %s",temp_var,$1.lhs,$3.lhs);
 
-  printf("\ncode is %s\n",$$.code);
+  //printf("\ncode is %s\n",$$.code);
 
-  printf("Quadruple is :\n");
-  printf("- \t %s \t %s \t %s \n\n",$1.lhs,$3.code,temp_var);
+  //printf("Quadruple is :\n");
+  //printf("- \t %s \t %s \t %s \n\n",$1.lhs,$3.code,temp_var);
 
   //fprintf(fp_quad,"- \t %s \t %s \t \t%s",$1.lhs,$3.code,temp_var); //op a1 a2 res
   
@@ -1066,12 +1093,12 @@ Bit_Exp: Add_Exp
   temp_var[m] = '\0';
 
   sprintf($$.lhs,temp_var);
-  sprintf($$.code,"%s = %s ^ %s",temp_var,$1.lhs,$3.code);
+  sprintf($$.code,"%s = %s ^ %s",temp_var,$1.lhs,$3.lhs);
 
-  printf("\ncode is %s\n",$$.code);
+  //printf("\ncode is %s\n",$$.code);
 
-  printf("Quadruple is :\n");
-  printf("^ \t %s \t %s \t %s \n\n",$1.lhs,$3.code,temp_var);
+  //printf("Quadruple is :\n");
+  //printf("^ \t %s \t %s \t %s \n\n",$1.lhs,$3.code,temp_var);
 
   //fprintf(fp_quad,"^ \t %s \t %s \t \t%s",$1.lhs,$3.code,temp_var); //op a1 a2 res
   
@@ -1092,12 +1119,12 @@ Bit_Exp: Add_Exp
   temp_var[m] = '\0';
 
   sprintf($$.lhs,temp_var);
-  sprintf($$.code,"%s = %s & %s",temp_var,$1.lhs,$3.code);
+  sprintf($$.code," %s = %s & %s",temp_var,$1.lhs,$3.lhs);
 
-  printf("\ncode is %s\n",$$.code);
+  //printf("\ncode is %s\n",$$.code);
 
-  printf("Quadruple is :\n");
-  printf("& \t %s \t %s \t %s \n\n",$1.lhs,$3.code,temp_var);
+  //printf("Quadruple is :\n");
+  //printf("& \t %s \t %s \t %s \n\n",$1.lhs,$3.code,temp_var);
 
   //fprintf(fp_quad,"& \t %s \t %s \t \t%s",$1.lhs,$3.code,temp_var); //op a1 a2 res
   
@@ -1117,12 +1144,12 @@ Bit_Exp: Add_Exp
   temp_var[m] = '\0';
 
   sprintf($$.lhs,temp_var);
-  sprintf($$.code,"%s = %s | %s",temp_var,$1.lhs,$3.code);
+  sprintf($$.code," %s = %s | %s",temp_var,$1.lhs,$3.lhs);
 
-  printf("\ncode is %s\n",$$.code);
+  //printf("\ncode is %s\n",$$.code);
 
-  printf("Quadruple is :\n");
-  printf("| \t %s \t %s \t %s \n\n",$1.lhs,$3.code,temp_var);
+  //printf("Quadruple is :\n");
+  //printf("| \t %s \t %s \t %s \n\n",$1.lhs,$3.code,temp_var);
 
   //fprintf(fp_quad,"| \t %s \t %s \t \t%s",$1.lhs,$3.code,temp_var); //op a1 a2 res
   
@@ -1147,10 +1174,11 @@ Rel_Exp: Bit_Exp
   sprintf(temp_var,"t%d",tempno++);
   m = strlen(temp_var);
   temp_var[m] = '\0';
-  printf("code is : \n%s = %s > %s\n",temp_var, $1.lhs, $3.lhs);
-  printf("Quadruple is :\n \t>\t\t%s\t\t%s\t\t%s\n\n", $1.lhs, $3.lhs, temp_var);
+  //printf("code is : \n%s = %s > %s\n",temp_var, $1.lhs, $3.lhs);
+  //printf("Quadruple is :\n \t>\t\t%s\t\t%s\t\t%s\n\n", $1.lhs, $3.lhs, temp_var);
 
-  strncpy($$.code, temp_var, m+1);
+  sprintf($$.code," %s = %s > %s\n",temp_var, $1.lhs, $3.lhs);
+  strncpy($$.lhs, temp_var, m+1);
 }
 | Rel_Exp GE Bit_Exp 
 {
@@ -1164,10 +1192,11 @@ Rel_Exp: Bit_Exp
   sprintf(temp_var,"t%d",tempno++);
   m = strlen(temp_var);
   temp_var[m] = '\0';
-  printf("code is:\n %s = %s >= %s\n",temp_var, $1.code, $3.code);
-  printf("Quadruple is : \n \t >= \t\t %s \t\t %s \t\t %s \n\n", $1.code, $3.code, temp_var);
+  //printf("code is:\n %s = %s >= %s\n",temp_var, $1.code, $3.code);
+  //printf("Quadruple is : \n \t >= \t\t %s \t\t %s \t\t %s \n\n", $1.code, $3.code, temp_var);
 
-  strncpy($$.code, temp_var, m+1);
+  sprintf($$.code,"%s = %s >= %s\n",temp_var, $1.lhs, $3.lhs);
+  strncpy($$.lhs, temp_var, m+1);
 }
 | Rel_Exp L Bit_Exp 
 {
@@ -1183,7 +1212,7 @@ Rel_Exp: Bit_Exp
   //printf("code is:\n %s = %s < %s\n",temp_var, $1.code, $3.code);
   //printf("Quadruple is : \n \t<\t\t%s\t\t%s\t\t%s\n\n", $1.code, $3.code, temp_var);
 
-  sprintf($$.code,"%s = %s < %s\n",temp_var, $1.code, $3.code);
+  sprintf($$.code," %s = %s < %s\n",temp_var, $1.lhs, $3.lhs);
   strncpy($$.lhs, temp_var, m+1);
 }
 | Rel_Exp LE Bit_Exp
@@ -1197,10 +1226,11 @@ Rel_Exp: Bit_Exp
   sprintf(temp_var,"t%d",tempno++);
   m = strlen(temp_var);
   temp_var[m] = '\0';
-  printf("code is:\n %s = %s <= %s\n",temp_var, $1.code, $3.code);
-  printf("Quadruple is : \n \t<=\t\t%s\t\t%s\t\t%s\n\n", $1.code, $3.code, temp_var);
+  //printf("code is:\n %s = %s <= %s\n",temp_var, $1.code, $3.code);
+  //printf("Quadruple is : \n \t<=\t\t%s\t\t%s\t\t%s\n\n", $1.code, $3.code, temp_var);
 
-  strncpy($$.code, temp_var, m+1);
+  sprintf($$.code," %s = %s <= %s\n",temp_var, $1.lhs, $3.lhs);
+  strncpy($$.lhs, temp_var, m+1);
 }
 ;
 Eq_Exp: Rel_Exp 
@@ -1221,10 +1251,11 @@ Eq_Exp: Rel_Exp
   sprintf(temp_var,"t%d",tempno++);
   m = strlen(temp_var);
   temp_var[m] = '\0';
-  printf("code is : \n%s = %s == %s\n", temp_var, $1.code, $3.code);
-  printf("Quadruple is: \n \t == \t\t%s\t\t%s\t\t%s\n\n", $1.code, $3.code, temp_var);
+  //printf("code is : \n%s = %s == %s\n", temp_var, $1.code, $3.code);
+  //printf("Quadruple is: \n \t == \t\t%s\t\t%s\t\t%s\n\n", $1.code, $3.code, temp_var);
 
-  strncpy($$.code, temp_var, m+1);   //check out
+  sprintf($$.code,"%s = %s == %s\n",temp_var, $1.lhs, $3.lhs);
+  strncpy($$.lhs, temp_var, m+1);   //check out
 }
 | Eq_Exp NEOP Rel_Exp 
 {
@@ -1238,10 +1269,11 @@ Eq_Exp: Rel_Exp
   sprintf(temp_var,"t%d",tempno++);
   m = strlen(temp_var);
   temp_var[m] = '\0';
-  printf("code is : \n%s = %s != %s\n", temp_var, $1.code, $3.code);
-  printf("Quadruple is: \n \t != \t\t%s\t\t%s\t\t%s\n\n", $1.code, $3.code, temp_var);
+  //printf("code is : \n%s = %s != %s\n", temp_var, $1.code, $3.code);
+  //printf("Quadruple is: \n \t != \t\t%s\t\t%s\t\t%s\n\n", $1.code, $3.code, temp_var);
 
-  strncpy($$.code, temp_var, m+1);   //check out
+  sprintf($$.code,"%s = %s != %s\n",temp_var,$1.lhs,$3.lhs);
+  strncpy($$.lhs, temp_var, m+1);   //check out
 }
 ;
 In_Exp: Eq_Exp 
@@ -1345,4 +1377,3 @@ return 1;
 
 
 }
-
