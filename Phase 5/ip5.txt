@@ -1,0 +1,8 @@
+=	0	 	a
+<	a	10	t0
++	a	1	t1
+=	t1	 	a
+param	a	0	0
+Label	 	 	L0
+=	15	 	a
+param	a	0	0

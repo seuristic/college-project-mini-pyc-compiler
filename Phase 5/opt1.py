@@ -146,6 +146,23 @@ def dead_code_elimination():
             if(lines[i][0]=="=" and lines[j][0]=="=" and lines[i][3] == lines[j][3]):
                 del lines[i]
 
+    print(lines)
+    i = len(lines)-2
+    while i >= 0:
+        flag = 0
+        if lines[i][0] == 'param':
+            i-=1
+            continue
+        for j in range(i+1,len(lines)):
+            if(lines[i][3] == lines[j][1]):
+                flag += 1
+            elif lines[j][0] == 'param' and lines[j][1] == lines[i][3]:
+                flag += 1
+        if flag == 0 :
+            del lines[i]
+            continue
+        i-=1
+
     return 1
 
 changed=1
