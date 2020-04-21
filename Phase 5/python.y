@@ -700,6 +700,13 @@ Const: CINT
   add_child($$.node,create_node(NULL,$$.value,0));
   add_sibling($$.node,create_node(NULL,"(",0));
   add_sibling($$.node,create_node(NULL,")",0));*/
+
+  sprintf(temp_var,"t%d",tempno++);
+  m = strlen(temp_var);
+  temp_var[m] = '\0';
+  sprintf($$.code,temp_var);
+  printf("call\t%s\tinput\t0\n",temp_var);
+  sprintf($$.lhs,"%s",temp_var);
 }
 ;
 Primary_Exp: ID 
