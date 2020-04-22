@@ -369,7 +369,7 @@ Compound_stmt: If_stmt
 {
   
   //$$.node=create_node(NULL,"While_stmt",0);add_child($$.node,$1.node);
-  printf("WHILE STATEMENT%s",$1.code);
+  //printf("WHILE STATEMENT%s",$1.code);
   strcpy($$.code,$1.code);
 }
 | For_stmt 
@@ -512,11 +512,29 @@ While_stmt: WHILE Exp COLON LBRACE Translation_unit RBRACE
   add_sibling($$.node,create_node(NULL,"}",0));*/
 
   ////printf("code is : \nL%d:\n", ln);
-  printf("Label\t \t \tL%d\n",ln); //quad format: op =label a1=null a2=null res=l<ln>
-  ln++;
-  strcpy($$.code,$2.code);
+  //printf("Label\t \t \tL%d\n",ln); //quad format: op =label a1=null a2=null res=l<ln>
+  //ln++;
+  //strcpy($$.code,$2.code);
   ////printf("code is If False %s goto L%d\n",$$.code,ln);
   ////printf("code is : \nL%d:\n", ln);
+
+
+  sprintf($$.begin,"L%d",ln++);
+  sprintf($$.end,"L%d",ln++);
+
+  sprintf($$.code,"Label\t \t \t%s\n %s \nIFFALSE\t%s\tgoto\t%s\n%s\ngoto\t \t \t%s\nLabel\t \t \t%s \n",$$.begin,$2.code,$2.lhs,$$.end,$5.code,$$.begin,$$.end);
+
+  //printf("%s",$$.code);
+  /*printf("code is : \nL%d:\n", ln);
+  //printf("Quadruple is:\n \tLabel\t  \t L%d\n\n", ln); //quad format: op =label a1=null a2=null res=l<ln>
+  //ln++;
+  //strcpy($$.code,$2.code);
+  //printf("code is If False %s goto L%d\n",$$.code,ln);
+  //printf("code is : \nL%d:\n", ln);*/
+
+
+
+
 }
 ;
 For_stmt: FOR ID IN Iterable COLON LBRACE Translation_unit RBRACE 
@@ -1169,9 +1187,9 @@ Rel_Exp: Bit_Exp
   m = strlen(temp_var);
   temp_var[m] = '\0';
   ////printf("code is : \n%s = %s > %s\n",temp_var, $1.lhs, $3.lhs);
-  printf(">\t%s\t%s\t%s\n", $1.lhs, $3.lhs, temp_var);
-
-  strncpy($$.code, temp_var, m+1);
+  //printf(">\t%s\t%s\t%s\n", $1.lhs, $3.lhs, temp_var);
+  sprintf($$.code,">\t%s\t%s\t%s\n", $1.lhs, $3.lhs, temp_var);
+  strncpy($$.lhs, temp_var, m+1);
 }
 | Rel_Exp GE Bit_Exp 
 {
@@ -1203,8 +1221,8 @@ Rel_Exp: Bit_Exp
   m = strlen(temp_var);
   temp_var[m] = '\0';
   ////printf("code is:\n %s = %s < %s\n",temp_var, $1.code, $3.code);
-  printf("<\t%s\t%s\t%s\n", $1.code, $3.code, temp_var);
-  sprintf($$.code,"<\t%s\t%s\t%s\n", $1.code, $3.code, temp_var);
+  //printf("<\t%s\t%s\t%s\n", $1.code, $3.code, temp_var);
+  sprintf($$.code,"%s\n%s\n<\t%s\t%s\t%s\n", $1.code, $3.code,$1.lhs,$3.lhs, temp_var);
   strncpy($$.lhs, temp_var, m+1);
 }
 | Rel_Exp LE Bit_Exp
