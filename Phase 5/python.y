@@ -450,7 +450,7 @@ If_stmt: IF Exp COLON LBRACE Translation_unit RBRACE Elif_stmt Else_stmt
 
   sprintf($$.begin,"L%d",ln++);
   sprintf($$.end,"L%d",ln++);
-  sprintf($$.code,"Label\t \t \t%s\n%sIFFALSE\t%s\tgoto\t%s\n%s\ngoto\t \t \t%s\nLabel\t \t \t%s\n%s\n",$$.begin,$2.code,$2.lhs,$$.end,$5.code,$$.end,$$.end,$7.code);
+  sprintf($$.code,"Label\t \t \t%s\n%sIfFalse\t%s\tgoto\t%s\n%s\ngoto\t \t \t%s\nLabel\t \t \t%s\n%s\n",$$.begin,$2.code,$2.lhs,$$.end,$5.code,$$.end,$$.end,$7.code);
 
   
 
@@ -522,7 +522,7 @@ While_stmt: WHILE Exp COLON LBRACE Translation_unit RBRACE
   sprintf($$.begin,"L%d",ln++);
   sprintf($$.end,"L%d",ln++);
 
-  sprintf($$.code,"Label\t \t \t%s\n %s \nIFFALSE\t%s\tgoto\t%s\n%s\ngoto\t \t \t%s\nLabel\t \t \t%s \n",$$.begin,$2.code,$2.lhs,$$.end,$5.code,$$.begin,$$.end);
+  sprintf($$.code,"Label\t \t \t%s\n %s \nIfFalse\t%s\tgoto\t%s\n%s\ngoto\t \t \t%s\nLabel\t \t \t%s \n",$$.begin,$2.code,$2.lhs,$$.end,$5.code,$$.begin,$$.end);
 
   //printf("%s",$$.code);
   /*printf("code is : \nL%d:\n", ln);
