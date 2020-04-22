@@ -269,7 +269,7 @@ int exprno = -1; //expr no
 
 %} 
 
-%union{ struct{char value[1024]; int type;struct Node *node;char lhs[1024]  ;char code[1024]}ctype; char val[1024]; };
+%union{ struct{char value[1024]; int type;struct Node *node;char lhs[1024]  ;char code[1024];char begin[1024]; char end[1024];}ctype; char val[1024]; };
 %token DOT LINE FALSE NONE TRUE LAND BREAK CONTINUE ELIF DEL ELSE FOR IF IN NOT LOR WHILE INPUT PRINT INT FLOAT STR LIST SPLIT MAP APPEND POP INSERT LEN ID CINT CFLOAT SEMI COMMA CSTR EPOP MUL DIV FDIV MOD ADD SUB ASOP G L GE LE EOP NEOP XOR BAND BOR LBRACE RBRACE LPAREN RPAREN LBRACKET RBRACKET RANGE COLON
 %type <ctype> Exp Const Or_Exp And_Exp In_Exp Eq_Exp Rel_Exp Bit_Exp Add_Exp Mul_Exp Pow_Exp Unary_Exp Primary_Exp ID Iterable Param_list Translation_unit Stmt Assignment_stmt Simple_stmt Compound_stmt Jump_stmt Print_stmt If_stmt Elif_stmt Else_stmt While_stmt For_stmt Expression_stmt Start
 %type<val> DOT LINE FALSE NONE TRUE LAND BREAK CONTINUE ELIF DEL ELSE FOR IF IN NOT LOR WHILE INPUT PRINT INT FLOAT STR LIST SPLIT MAP APPEND POP INSERT LEN  CINT CFLOAT SEMI COMMA CSTR EPOP MUL DIV FDIV MOD ADD SUB ASOP G L GE LE EOP NEOP XOR BAND BOR LBRACE RBRACE LPAREN RPAREN LBRACKET RBRACKET RANGE COLON 
@@ -278,6 +278,7 @@ Start: Translation_unit
 {
   /*add_child(head->node,create_node(NULL,"Translation_unit",0));
   add_child(head->node->child,$1.node);*/
+  printf("%s",$1.code);
 }
 ;
 Translation_unit: Stmt Translation_unit 
@@ -286,11 +287,16 @@ Translation_unit: Stmt Translation_unit
   add_child(end_node($$.node),$1.node);
   add_sibling($$.node,create_node(NULL,"Translation_unit",0));
   add_child(end_node($$.node),$2.node);*/
+  //printf("TU\n%s",$1.code);
+  //printf("TU2\n%s",$2.code);
+  sprintf($$.code,"%s\n%s",$1.code,$2.code);
 }
 | Stmt
 {
   /*$$.node = create_node(NULL,"Stmt",0);
   add_child(end_node($$.node),$1.node);*/
+  strcpy($$.code,$1.code);
+  //printf("%s",$1.code);
 }
 ;
 Stmt: Simple_stmt SEMI 
@@ -298,17 +304,24 @@ Stmt: Simple_stmt SEMI
   /*$$.node=create_node(NULL,"Simple_stmt",0);
   add_child($$.node,$1.node);
   add_sibling($$.node,create_node(NULL,";",0));*/
+  strcpy($$.code,$1.code);
+  //printf("simp%s",$1.code);
 }
 | Compound_stmt 
 {
   /*$$.node=create_node(NULL,"Compound_stmt",0);
   add_child($$.node,$1.node);*/
+  strcpy($$.code,$1.code);
+  //printf("cmp%s",$1.code);
 }
 | Assignment_stmt SEMI 
 {
   /*$$.node=create_node(NULL,"Assignment_stmt",0);
   add_child($$.node,$1.node);
   add_sibling($$.node,create_node(NULL,";",0));*/
+  //printf("assg%s",$1.code);
+  strcpy($$.code,$1.code);
+
 }
 ;
 Assignment_stmt: ID ASOP Exp 
@@ -322,94 +335,42 @@ Assignment_stmt: ID ASOP Exp
   add_sibling($$.node,create_node(NULL,"EXP",0));
   add_child(end_node($$.node),$3.node);*/
 
+  sprintf($$.code,"%s\n=\t%s\t\t%s\n",$3.code,$3.lhs,$1.value);
 
-
-  if (exprno==0)
-  {
-    //printf("op \t arg1 \t arg2 \t res \n");
-    //printf("-----------------------------------------------------\n");
-
-    //////printf("code is: %s = %s \n",$1.value,$3.code);
-    //printf("Quadruple is:\n");
-    printf("=\t%s\t \t%s\n",$3.code,$1.value);
-    
-    sprintf($$.code,"%s = %s",$1.value,$3.code);
-    //printf("0code is %s",$$.code);
-  }
-  else if(exprno==1)
-  {
-
-  //printf("op \t arg1 \t arg2 \t res \n");
-  //printf("-----------------------------------------------------\n");
-  // temporarily printing here, will insert into quad later
-
-  sprintf($$.code,"%s",$3.code);
-  ////////printf("code is %s\n",$$.code);
-
-  //////printf("code is %s = t%d\n",$1.value,--tempno);
-  //printf("Quadruple is:\n");
-  printf("=\t%s\t \t%s\n",$3.lhs,$1.value);
   
-  
-
-  }
-  else if(exprno==2)
-  {
-  if (unop==0)
-    {sprintf($$.code,"%s = %s",$1.value,$3.code);
-    //////printf("code is:\n %s\n",$$.code);
-
-    ////////printf("code is :\n %s = t%d\n",$1.value,--tempno);
-    //printf("Quadruple is:\n");
-    printf("=\t%s\t%s\n",$3.code,$1.value);
-    }
-  else if(unop==1)
-    {
-    sprintf($$.code,"%s = - %s",$1.value,$3.code);
-    //////printf("code is :\n%s\n",$$.code);
-
-    ////////printf("code is : \n%s = t%d\n",$1.value,--tempno);
-    //printf("Quadruple is:\n");
-    printf("-\t%s\t%s\n",$3.code,$1.value);
-    }
-
-    else if(unop==2)
-    {
-    sprintf($$.code,"%s = not %s",$1.value,$3.code);
-    //////printf("code is: \n %s\n",$$.code);
-
-    ////////printf("code is : \n%s = t%d\n",$1.value,--tempno);
-    //printf("Quadruple is:\n");
-    printf("not\t%s\t%s\n",$3.code,$1.value);
-    }
-
-  }
 
 
 }
 Simple_stmt: Expression_stmt 
 {
   //$$.node=create_node(NULL,"Expression_stmt",0);add_child($$.node,$1.node);
+  strcpy($$.code,$1.code);
 }
 | Print_stmt 
 {
   paramno=0;
   //$$.node=create_node(NULL,"Print_stmt",0);add_child($$.node,$1.node);
+  strcpy($$.code,$1.code);
 }
 | Jump_stmt 
 {
   //$$.node=create_node(NULL,"Jump_stmt",0);add_child($$.node,$1.node);
+  strcpy($$.code,$1.code);
 
 }
 ;
 Compound_stmt: If_stmt 
 {
   //$$.node=create_node(NULL,"If_stmt",0);add_child($$.node,$1.node);
+  //printf("IF STATEMENT\n%s",$1.code);
+  strcpy($$.code,$1.code);
 }
 | While_stmt 
 {
   
   //$$.node=create_node(NULL,"While_stmt",0);add_child($$.node,$1.node);
+  printf("WHILE STATEMENT%s",$1.code);
+  strcpy($$.code,$1.code);
 }
 | For_stmt 
 {
@@ -420,6 +381,7 @@ Compound_stmt: If_stmt
 Jump_stmt: BREAK 
 {
   //$$.node=create_node(NULL,"BREAK",0);
+  sprintf($$.code,"goto\t \t \tL%d",ln);
 
 }
 | CONTINUE 
@@ -433,7 +395,8 @@ Print_stmt: PRINT LPAREN Param_list RPAREN
   add_sibling($$.node,create_node(NULL,"(",0));
   add_sibling($$.node,$3.node);
   add_sibling($$.node,create_node(NULL,")",0));*/
-  printf("call\t \tprint\t%d\n",paramno);
+  //printf("call\t \tprint\t%d\n",paramno);
+  sprintf($$.code,"%s\ncall\t \tprint\t%d\n",$3.code,paramno);
 }
 ;
 Param_list: Param_list COMMA Exp  
@@ -447,16 +410,18 @@ Param_list: Param_list COMMA Exp
   add_child(end_node($$.node),$3.node);*/
 
   sprintf($$.lhs,$1.lhs);
-  printf("param\t \t%s\n",$3.lhs);
+  //printf("param\t \t%s\n",$3.lhs);
+  sprintf($$.code,"%s\n\t%s\nparam\t \t%s\n",$1.code,$3.code,$3.lhs);
   paramno++;
 }
 | Exp 
 {  
   /*$$.node = create_node(NULL,"EXP",0);
   add_child(end_node($$.node),$1.node);*/
-  strcpy($$.code,$1.code);
-  sprintf($$.lhs,$1.lhs);
-  printf("param\t \t%s\n",$1.lhs);
+  //strcpy($$.code,$1.code);
+  sprintf($$.lhs,"%s",$1.lhs);
+  //printf("%s\nparam\t \t%s\n",$1.code,$1.lhs);
+  sprintf($$.code,"%s\nparam\t \t%s\n",$1.code,$1.lhs);
   paramno++;
 
 
@@ -479,9 +444,15 @@ If_stmt: IF Exp COLON LBRACE Translation_unit RBRACE Elif_stmt Else_stmt
   add_child(end_node($$.node),$8.node);*/
 
   
-  strcpy($$.code,$2.code);
+  //strcpy($$.code,$2.code);
   //////printf("code is:\n If False %s goto L%d\n",$$.code,ln++);
-  printf("IfFalse\t%s\t \tL%d\n",$$.code,ln);
+  //printf("IfFalse\t%s\t \tL%d\n",$$.code,ln);
+
+  sprintf($$.begin,"L%d",ln++);
+  sprintf($$.end,"L%d",ln++);
+  sprintf($$.code,"Label\t \t \t%s\n%sIFFALSE\t%s\tgoto\t%s\n%s\ngoto\t \t \t%s\nLabel\t \t \t%s\n%s\n",$$.begin,$2.code,$2.lhs,$$.end,$5.code,$$.end,$$.end,$7.code);
+
+  
 
 }
 ;
@@ -500,12 +471,13 @@ Elif_stmt: ELIF Exp COLON LBRACE Translation_unit RBRACE Elif_stmt
   int l=ln;
   ln++;
   ////printf("code is:\n L%d\n",l);
-  printf("Label\t \t \tL%d\n",l);
+  //printf("Label\t \t \tL%d\n",l);
 } 
 | {int l=ln;
   ln++;
   ////printf("code is:\n L%d\n",l);
-  printf("Label\t \t \tL%d\n",l);}
+  //sprintf($$.code,"Label\t \t \tL%d\n",l);
+  }
 ;
 Else_stmt: ELSE COLON LBRACE Translation_unit RBRACE
 {
@@ -517,15 +489,15 @@ Else_stmt: ELSE COLON LBRACE Translation_unit RBRACE
   add_sibling($$.node,create_node(NULL,"}",0));*/
 
   int l=ln;
-  ln++;
+  //ln++;
   ////printf("code is:\n L%d\n",l);
-  printf("Label\t \t \tL%d\n",l);
+  //printf($$.code,"Label\t \t \tL%d\n",l);
 } 
 | {
   int l=ln;
-  ln++;
+  //ln++;
   ////printf("code is:\n L%d\n",l);
-  printf("Label\t \t \tL%d\n",l);
+  //sprintf($$.code,"Label\t \t \tL%d\n",l);
   }
 ;
 While_stmt: WHILE Exp COLON LBRACE Translation_unit RBRACE 
@@ -601,6 +573,7 @@ Expression_stmt: Exp
  /* $$.node = create_node(NULL,"Exp",0);
   add_child($$.node,$1.node);*/
   strcpy($$.code,$1.code);
+  strcpy($$.lhs,$1.lhs);
 
 
 }
@@ -610,6 +583,7 @@ Exp: Or_Exp
   /*$$.node = create_node(NULL,"Or_Exp",0);
   add_child($$.node,$1.node);*/
   strcpy($$.code,$1.code);
+  strcpy($$.lhs,$1.lhs);
 
   
 }
@@ -622,7 +596,7 @@ Const: CINT
   add_child($$.node,create_node(NULL,$$.value,0));*/
 
   //printf("in const cint %s\n",$1);
-  strcpy($$.code,$1);
+  strcpy($$.lhs,$1);
   sprintf($$.lhs,"%s",$1);
   exprno=0;
 
@@ -704,7 +678,7 @@ Const: CINT
   sprintf(temp_var,"t%d",tempno++);
   m = strlen(temp_var);
   temp_var[m] = '\0';
-  sprintf($$.code,temp_var);
+  //sprintf($$.code,temp_var);
   printf("call\t%s\tinput\t0\n",temp_var);
   sprintf($$.lhs,"%s",temp_var);
 }
@@ -716,7 +690,7 @@ Primary_Exp: ID
   /*$$.node = create_node(NULL,"ID",0); 
   add_child($$.node,create_node(NULL,$1.value,0));*/
 
-  strcpy($$.code,$1.value);
+  //strcpy($$.code,$1.value);
   //printf("in id %s\n",$1.value);
 
   sprintf($$.lhs,"%s",$1.value);
@@ -806,7 +780,21 @@ Unary_Exp: SUB Primary_Exp
   add_sibling($$.node,create_node(NULL,"Primary_Exp",0));
   add_child(end_node($$.node),$2.node);*/
 
-  strcpy($$.code,$2.lhs);
+  tempno++;
+  sprintf(temp_var,"t%d",tempno++);
+  m = strlen(temp_var);
+  temp_var[m] = '\0';
+
+  sprintf($$.lhs,temp_var);
+  //printf($$.code,"hi %s = - %s ",$2.lhs,$2.lhs);
+
+  //printf("\ncode is %s\n",$$.code);
+
+  //printf("Quadruple is :\n");
+  printf("Uminus\t%s\t \t%s\n",$2.lhs,$$.lhs);
+  sprintf($$.code,"Uminus\t%s\t \t%s\n",$2.lhs,$$.lhs);
+
+  strcpy($$.lhs,$2.lhs);
   //printf("hi %s",$2.lhs);
   //sprintf($$.lhs,"%s",$1);
   exprno=2;
@@ -828,18 +816,18 @@ Unary_Exp: SUB Primary_Exp
   unop=0;
   //tempno++;
 
-  /*tempno++;
+  tempno++;
   sprintf(temp_var,"t%d",tempno++);
   m = strlen(temp_var);
   temp_var[m] = '\0';
 
-  //sprintf($$.lhs,temp_var);
+  sprintf($$.lhs,temp_var);
   sprintf($$.code,"%s = %s ",$$.lhs,$2.lhs);
 
-  printf("\ncode is %s\n",$$.code);
+  //printf("\ncode is %s\n",$$.code);
 
-  printf("Quadruple is :\n");
-  printf("Uplus \t %s \t  \t %s \n\n",$2.lhs,$$.lhs);*/
+  //printf("Quadruple is :\n");
+  printf("Uplus\t%s\t \t%s\n",$2.lhs,$$.lhs);
 
   
   exprno=2;
@@ -855,6 +843,20 @@ Unary_Exp: SUB Primary_Exp
   add_sibling($$.node,create_node(NULL,"Primary_Exp",0));
   add_child(end_node($$.node),$$.node);*/
   
+
+  sprintf(temp_var,"t%d",tempno++);
+  m = strlen(temp_var);
+  temp_var[m] = '\0';
+
+  strcpy($$.lhs,temp_var);
+  sprintf($$.code,"%s = not %s ",temp_var,$2.lhs);
+
+  //printf("\ncode is %s\n",$$.code);
+
+  //printf("Quadruple is :\n");
+  printf("not\t%s\t\t%s\n",$2.lhs,$$.lhs);
+
+
   strcpy($$.code,$2.lhs);
   //printf("hi %s",$2.lhs);
   //sprintf($$.lhs,"%s",$1);
@@ -868,6 +870,7 @@ Unary_Exp: SUB Primary_Exp
   add_child($$.node,$1.node);*/
 
   strcpy($$.code,$1.code);
+  strcpy($$.lhs,$1.lhs);
 }
 ;
 Pow_Exp: Unary_Exp 
@@ -892,12 +895,12 @@ Pow_Exp: Unary_Exp
   temp_var[m] = '\0';
 
   sprintf($$.lhs,temp_var);
-  sprintf($$.code,"%s = %s ** %s",temp_var,$1.lhs,$3.code);
+  sprintf($$.code,"%s\n%s\n**\t%s\t%s\t%s\n",$1.code,$3.code,$1.lhs,$3.lhs,temp_var);
 
   //printf("\ncode is %s\n",$$.code);
 
   
-  printf("**\t%s\t%s\t%s\n",$1.lhs,$3.code,temp_var);
+  //printf("**\t%s\t%s\t%s\n",$1.lhs,$3.lhs,temp_var);
 
   //fprintf(fp_quad,"** \t %s \t %s \t \t%s",$1.lhs,$3.code,temp_var); //op a1 a2 res
   
@@ -910,6 +913,7 @@ Mul_Exp: Pow_Exp
   add_child($$.node,$1.node);*/
 
   strcpy($$.code,$1.code);
+  strcpy($$.lhs,$1.lhs);
 }
 | Mul_Exp MUL Pow_Exp 
 {
@@ -924,12 +928,12 @@ Mul_Exp: Pow_Exp
   temp_var[m] = '\0';
 
   sprintf($$.lhs,temp_var);
-  sprintf($$.code,"%s = %s * %s",temp_var,$1.lhs,$3.code);
+  sprintf($$.code,"%s\n%s\n*\t%s\t%s\t%s\n",$1.code,$3.code,$1.lhs,$3.lhs,temp_var);
 
   //printf("\ncode is %s\n",$$.code);
 
   //printf("Quadruple is :\n");
-  printf("*\t%s\t%s\t%s\n",$1.lhs,$3.code,temp_var);
+  //printf("*\t%s\t%s\t%s\n",$1.lhs,$3.code,temp_var);
 
   //fprintf(fp_quad,"* \t %s \t %s \t \t%s",$1.lhs,$3.code,temp_var); //op a1 a2 res
   
@@ -950,7 +954,7 @@ Mul_Exp: Pow_Exp
   temp_var[m] = '\0';
 
   sprintf($$.lhs,temp_var);
-  sprintf($$.code,"%s = %s / %s",temp_var,$1.lhs,$3.code);
+  sprintf($$.code,"%s\n%s\n/\t%s\t%s\t%s\n",$1.code,$3.code,$1.lhs,$3.lhs,temp_var);
 
   //printf("\ncode is %s\n",$$.code);
 
@@ -968,6 +972,18 @@ Mul_Exp: Pow_Exp
   add_sibling($$.node,create_node(NULL,"//",0));
   add_sibling($$.node,create_node(NULL,"Pow_Exp",0));
   add_child(end_node($$.node),$3.node);*/
+
+  sprintf(temp_var,"t%d",tempno++);
+  m = strlen(temp_var);
+  temp_var[m] = '\0';
+
+  strcpy($$.lhs,temp_var);
+  sprintf($$.code,"%s\n%s\n//\t%s\t%s\t%s\n",$1.code,$3.code,$1.lhs,$3.lhs,temp_var);
+
+  //printf("\ncode is %s\n",$$.code);
+
+  //printf("Quadruple is :\n");
+  //printf("//\t%s\t%s\t%s\n",$1.lhs,$3.code,temp_var);
 }
 | Mul_Exp MOD Pow_Exp
 {
@@ -976,6 +992,19 @@ Mul_Exp: Pow_Exp
   add_sibling($$.node,create_node(NULL,"%",0));
   add_sibling($$.node,create_node(NULL,"Pow_Exp",0));
   add_child(end_node($$.node),$3.node);*/
+
+  sprintf(temp_var,"t%d",tempno++);
+  m = strlen(temp_var);
+  temp_var[m] = '\0';
+
+  strcpy($$.lhs,temp_var);
+  sprintf($$.code,"%s = %s % %s",temp_var,$1.lhs,$3.code);
+
+
+  //printf("\ncode is %s\n",$$.code);
+
+  //printf("Quadruple is :\n");
+  //printf("%\t%s\t%s\t%s\n",$1.lhs,$3.code,temp_var);
 }
 ;
 Add_Exp: Mul_Exp 
@@ -984,6 +1013,7 @@ Add_Exp: Mul_Exp
   add_child($$.node,$1.node);*/
 
   strcpy($$.code,$1.code);
+  strcpy($$.lhs,$1.lhs);
 }
 | Add_Exp ADD Mul_Exp 
 {
@@ -998,12 +1028,13 @@ Add_Exp: Mul_Exp
   temp_var[m] = '\0';
 
   strcpy($$.lhs,temp_var);
-  sprintf($$.code,"%s = %s + %s",temp_var,$1.lhs,$3.code);
+  //sprintf($$.code,"hello%s = %s + %s",temp_var,$1.lhs,$3.lhs);
 
   //printf("\ncode is %s\n",$$.code);
 
   //printf("Quadruple is :\n");
-  printf("+\t%s\t%s\t%s\n",$1.lhs,$3.code,temp_var);
+  //printf("+\t%s\t%s\t%s\n",$1.lhs,$3.lhs,temp_var);
+  sprintf($$.code,"%s%s\n+\t%s\t%s\t%s\n",$1.code,$3.code,$1.lhs,$3.lhs,temp_var);
 
   //fprintf(fp_quad,"+ \t %s \t %s \t \t%s",$1.lhs,$3.code,temp_var); //op a1 a2 res
   
@@ -1022,12 +1053,12 @@ Add_Exp: Mul_Exp
   temp_var[m] = '\0';
 
   sprintf($$.lhs,temp_var);
-  sprintf($$.code,"%s = %s - %s",temp_var,$1.lhs,$3.code);
+  sprintf($$.code,"%s\n%s\n-\t%s\t%s\t%s\n",$1.code,$3.code,$1.lhs,$3.lhs,temp_var);
 
   //printf("\ncode is %s\n",$$.code);
 
   //printf("Quadruple is :\n");
-  printf("-\t%s\t%s\t%s\n",$1.lhs,$3.code,temp_var);
+  //printf("-\t%s\t%s\t%s\n",$1.lhs,$3.code,temp_var);
 
   //fprintf(fp_quad,"- \t %s \t %s \t \t%s",$1.lhs,$3.code,temp_var); //op a1 a2 res
   
@@ -1040,6 +1071,7 @@ Bit_Exp: Add_Exp
   add_child($$.node,$1.node);*/
 
   strcpy($$.code,$1.code);
+  strcpy($$.lhs,$1.lhs);
 }
 | Bit_Exp XOR Add_Exp 
 {
@@ -1054,12 +1086,12 @@ Bit_Exp: Add_Exp
   temp_var[m] = '\0';
 
   sprintf($$.lhs,temp_var);
-  sprintf($$.code,"%s = %s ^ %s",temp_var,$1.lhs,$3.code);
+  sprintf($$.code,"^\t%s\t%s\t%s\n",$1.lhs,$3.code,temp_var);
 
   //printf("\ncode is %s\n",$$.code);
 
   //printf("Quadruple is :\n");
-  printf("^\t%s\t%s\t%s\n",$1.lhs,$3.code,temp_var);
+  printf("%s\n%s\n^\t%s\t%s\t%s\n",$1.code,$3.code,$1.lhs,$3.lhs,temp_var);
 
   //fprintf(fp_quad,"^ \t %s \t %s \t \t%s",$1.lhs,$3.code,temp_var); //op a1 a2 res
   
@@ -1080,7 +1112,7 @@ Bit_Exp: Add_Exp
   temp_var[m] = '\0';
 
   sprintf($$.lhs,temp_var);
-  sprintf($$.code,"%s = %s & %s",temp_var,$1.lhs,$3.code);
+  sprintf($$.code,"%s\n%s\n&\t%s\t%s\t%s\n",$1.code,$3.code,$1.lhs,$3.lhs,temp_var);
 
   //printf("\ncode is %s\n",$$.code);
 
@@ -1105,11 +1137,11 @@ Bit_Exp: Add_Exp
   temp_var[m] = '\0';
 
   sprintf($$.lhs,temp_var);
-  sprintf($$.code,"%s = %s | %s",temp_var,$1.lhs,$3.code);
+  sprintf($$.code,"%s\n%s\n|\t%s\t%s\t%s\n",$1.code,$3.code,$1.lhs,$3.lhs,temp_var);
 
   //printf("\ncode is %s\n",$$.code);
 
-  printf("Quadruple is :\n");
+  //printf("Quadruple is :\n");
   printf("|\t%s\t%s\t%s\n",$1.lhs,$3.code,temp_var);
 
   //fprintf(fp_quad,"| \t %s \t %s \t \t%s",$1.lhs,$3.code,temp_var); //op a1 a2 res
@@ -1123,6 +1155,7 @@ Rel_Exp: Bit_Exp
   add_child($$.node,$1.node);*/
 
   strcpy($$.code,$1.code);
+  strcpy($$.lhs,$1.lhs);
 }
 | Rel_Exp G Bit_Exp 
 {
@@ -1153,9 +1186,10 @@ Rel_Exp: Bit_Exp
   m = strlen(temp_var);
   temp_var[m] = '\0';
   ////printf("code is:\n %s = %s >= %s\n",temp_var, $1.code, $3.code);
-  printf(">=\t%s\t%s\t%s\n", $1.code, $3.code, temp_var);
+  //printf(">=\t%s\t%s\t%s\n", $1.code, $3.code, temp_var);
 
-  strncpy($$.code, temp_var, m+1);
+  sprintf($$.code,"%s\n%s\n>=\t%s\t%s\t%s\n", $1.code, $3.code,$1.lhs,$3.lhs, temp_var);
+  strncpy($$.lhs, temp_var, m+1);
 }
 | Rel_Exp L Bit_Exp 
 {
@@ -1170,8 +1204,8 @@ Rel_Exp: Bit_Exp
   temp_var[m] = '\0';
   ////printf("code is:\n %s = %s < %s\n",temp_var, $1.code, $3.code);
   printf("<\t%s\t%s\t%s\n", $1.code, $3.code, temp_var);
-
-  strncpy($$.code, temp_var, m+1);
+  sprintf($$.code,"<\t%s\t%s\t%s\n", $1.code, $3.code, temp_var);
+  strncpy($$.lhs, temp_var, m+1);
 }
 | Rel_Exp LE Bit_Exp
 {
@@ -1185,9 +1219,9 @@ Rel_Exp: Bit_Exp
   m = strlen(temp_var);
   temp_var[m] = '\0';
   ////printf("code is:\n %s = %s <= %s\n",temp_var, $1.code, $3.code);
-  printf("<=\t%s\t%s\t%s\n", $1.code, $3.code, temp_var);
-
-  strncpy($$.code, temp_var, m+1);
+  //printf("<=\t%s\t%s\t%s\n", $1.code, $3.code, temp_var);
+  sprintf($$.code,"<=\t%s\t%s\t%s\n", $1.code, $3.code, temp_var);
+  strncpy($$.lhs, temp_var, m+1);
 }
 ;
 Eq_Exp: Rel_Exp 
@@ -1209,9 +1243,11 @@ Eq_Exp: Rel_Exp
   m = strlen(temp_var);
   temp_var[m] = '\0';
   ////printf("code is : \n%s = %s == %s\n", temp_var, $1.code, $3.code);
-  printf("==\t%s\t%s\t%s\n", $1.code, $3.code, temp_var);
+  //printf("==\t%s\t%s\t%s\n", $1.code, $3.code, temp_var);
 
-  strncpy($$.code, temp_var, m+1);   //check out
+  //strncpy($$.code, temp_var, m+1);   //check out
+  strcpy($$.lhs,temp_var);
+  sprintf($$.code,"%s\n%s\n==\t%s\t%s\t%s\n", $1.code, $3.code,$1.lhs,$3.lhs, temp_var);
 }
 | Eq_Exp NEOP Rel_Exp 
 {
@@ -1226,9 +1262,9 @@ Eq_Exp: Rel_Exp
   m = strlen(temp_var);
   temp_var[m] = '\0';
   ////printf("code is : \n%s = %s != %s\n", temp_var, $1.code, $3.code);
-  printf("!=\t%s\t%s\t%s\n", $1.code, $3.code, temp_var);
+  sprintf("%s\n%s\n!=\t%s\t%s\t%s\n", $1.code, $3.code,$1.lhs,$3.lhs, temp_var);
 
-  strncpy($$.code, temp_var, m+1);   //check out
+  strncpy($$.lhs, temp_var, m+1);   //check out
 }
 ;
 In_Exp: Eq_Exp 
@@ -1237,6 +1273,7 @@ In_Exp: Eq_Exp
   add_child($$.node,$1.node);*/
 
   strcpy($$.code,$1.code);
+  strcpy($$.lhs,$1.lhs);
 }
 | Eq_Exp IN In_Exp   
 {
@@ -1253,6 +1290,7 @@ And_Exp: In_Exp
   add_child($$.node,$1.node);*/
 
   strcpy($$.code,$1.code);
+  strcpy($$.lhs,$1.lhs);
 }
 | In_Exp LAND And_Exp   
 {
@@ -1272,6 +1310,7 @@ Or_Exp: And_Exp
   add_child($$.node,$1.node);*/
 
   strcpy($$.code,$1.code);
+  strcpy($$.lhs,$1.lhs);
 }
 | And_Exp LOR Or_Exp 
 {
