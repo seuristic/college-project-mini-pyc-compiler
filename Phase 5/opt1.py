@@ -18,7 +18,9 @@ is_const = lambda x: is_int(x) or is_bool(x) or is_float(x) or is_str(x)
 operators={'+','-','*','/','//','%','in','and','or','|','&','**','^','not','>>','<<',"==","!=",">","<",">=","<="}
 
 for line in stdin:
-    lines.append(line.strip().split("\t"))
+    temp=line.strip().split("\t")
+    if temp!=['']:
+        lines.append(temp)
 
 print("before optimization :")
 print(lines)
