@@ -159,7 +159,7 @@ def dead_code_elimination():
             #print(i,j,flag)
             if(lines[i][3] == lines[j][1]):
                 flag += 1
-            elif lines[j][0] == 'param' and lines[j][2] == lines[i][3]:
+            elif lines[j][0] == 'param' and lines[j][3] == lines[i][3]:
                 flag += 1
         if flag == 0 :
             del lines[i]
