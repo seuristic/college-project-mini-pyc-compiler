@@ -148,21 +148,21 @@ def dead_code_elimination():
             if(lines[i][0]=="=" and lines[j][0]=="=" and lines[i][3] == lines[j][3]):
                 del lines[i]
 
-    print(lines)
-    i = len(lines)-2
+    i = len(lines)-1
     while i >= 0:
         flag = 0
-        if lines[i][0] == 'param':
+        #print(lines)
+        if lines[i][0] == 'param' or lines[i][0] == 'call' or lines[i][0] == 'Label' or lines[i][0] == 'IfFalse' or lines[i][0] == 'if' or lines[i][0] == 'goto':
             i-=1
             continue
         for j in range(i+1,len(lines)):
+            #print(i,j,flag)
             if(lines[i][3] == lines[j][1]):
                 flag += 1
-            elif lines[j][0] == 'param' and lines[j][1] == lines[i][3]:
+            elif lines[j][0] == 'param' and lines[j][2] == lines[i][3]:
                 flag += 1
         if flag == 0 :
             del lines[i]
-            continue
         i-=1
 
     return 1
