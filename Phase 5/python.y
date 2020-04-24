@@ -411,7 +411,7 @@ Param_list: Param_list COMMA Exp
 
   sprintf($$.lhs,$1.lhs);
   //printf("param\t \t%s\n",$3.lhs);
-  sprintf($$.code,"%s\n\t%s\nparam\t \t%s\n",$1.code,$3.code,$3.lhs);
+  sprintf($$.code,"%s\n\t%s\nparam\t \t \t%s\n",$1.code,$3.code,$3.lhs);
   paramno++;
 }
 | Exp 
@@ -421,7 +421,7 @@ Param_list: Param_list COMMA Exp
   //strcpy($$.code,$1.code);
   sprintf($$.lhs,"%s",$1.lhs);
   //printf("%s\nparam\t \t%s\n",$1.code,$1.lhs);
-  sprintf($$.code,"%s\nparam\t \t%s\n",$1.code,$1.lhs);
+  sprintf($$.code,"%s\nparam\t \t \t%s\n",$1.code,$1.lhs);
   paramno++;
 
 
