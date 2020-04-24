@@ -450,7 +450,8 @@ If_stmt: IF Exp COLON LBRACE Translation_unit RBRACE Elif_stmt Else_stmt
 
   sprintf($$.begin,"L%d",ln++);
   sprintf($$.end,"L%d",ln++);
-  sprintf($$.code,"Label\t \t \t%s\n%sIfFalse\t%s\tgoto\t%s\n%s\ngoto\t \t \t%s\nLabel\t \t \t%s\n%s\n",$$.begin,$2.code,$2.lhs,$$.end,$5.code,$$.end,$$.end,$7.code);
+  strcpy($$.end,$8.end);
+  sprintf($$.code,"Label\t \t \t%s\n%sIfFalse\t%s\tgoto\t%s\n%s\ngoto\t \t \t%s\n%s\n%s\n",$$.begin,$2.code,$2.lhs,$7.begin,$5.code,$8.end,$7.code,$8.code);
 
   
 
@@ -472,11 +473,17 @@ Elif_stmt: ELIF Exp COLON LBRACE Translation_unit RBRACE Elif_stmt
   ln++;
   ////printf("code is:\n L%d\n",l);
   //printf("Label\t \t \tL%d\n",l);
+  sprintf($$.begin,"L%d",ln++);
+  sprintf($$.end,"L%d",ln++);
+  //sprintf($$.code,"elif code");
+  sprintf($$.code,"Label\t \t \t%s\n%sIfFalse\t%s\tgoto\t%s\n%s\ngoto\t \t \t%s\n%s\n",$$.begin,$2.code,$2.lhs,$7.begin,$5.code,$$.end,$7.code);
 } 
 | {int l=ln;
-  ln++;
-  ////printf("code is:\n L%d\n",l);
-  //sprintf($$.code,"Label\t \t \tL%d\n",l);
+  //ln++;
+  sprintf($$.begin,"L%d",ln);
+  sprintf($$.end,"L%d",ln);
+  sprintf($$.code,"Label\t \t \t%s\n",$$.end);
+
   }
 ;
 Else_stmt: ELSE COLON LBRACE Translation_unit RBRACE
@@ -488,16 +495,32 @@ Else_stmt: ELSE COLON LBRACE Translation_unit RBRACE
   add_child(end_node($$.node),$4.node);
   add_sibling($$.node,create_node(NULL,"}",0));*/
 
-  int l=ln;
+  //int l=ln;
   //ln++;
   ////printf("code is:\n L%d\n",l);
   //printf($$.code,"Label\t \t \tL%d\n",l);
+
+
+  int l=ln;
+  ln++;
+  ////printf("code is:\n L%d\n",l);
+  //printf("Label\t \t \tL%d\n",l);
+  sprintf($$.begin,"L%d",ln++);
+  sprintf($$.end,"L%d",ln++);
+  //sprintf($$.code,"else code");
+  //sprintf($$.code,"Label\t \t \t%s\n%s\ngoto\t \t \t%s\nLabel\t \t \t%s\n",$$.begin,$4.code,$$.end,$$.end);
+  sprintf($$.code,"%s\ngoto\t \t \t%s\nLabel\t \t \t%s",$4.code,$$.end,$$.end);
+
 } 
 | {
   int l=ln;
   //ln++;
+  sprintf($$.begin,"L%d",ln);
+  sprintf($$.end,"L%d",ln);
   ////printf("code is:\n L%d\n",l);
   //sprintf($$.code,"Label\t \t \tL%d\n",l);
+  //sprintf($$.code,"Label\t \t \t%s\n",$$.end);
+
   }
 ;
 While_stmt: WHILE Exp COLON LBRACE Translation_unit RBRACE 
