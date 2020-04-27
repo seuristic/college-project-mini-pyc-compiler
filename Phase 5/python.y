@@ -12,6 +12,7 @@ char temp_var[100];
 int m = 0;        //string length for temp_var
 int unop =0;
 int paramno=0;
+char final_out[1024];
 
 typedef struct Node
 {
@@ -335,7 +336,7 @@ Assignment_stmt: ID ASOP Exp
   add_sibling($$.node,create_node(NULL,"EXP",0));
   add_child(end_node($$.node),$3.node);*/
 
-  sprintf($$.code,"%s\n=\t%s\t \t%s\n",$3.code,$3.lhs,$1.value);
+  sprintf($$.code,"%s\n=\t%s\t\t%s\n",$3.code,$3.lhs,$1.value);
 
   
 
@@ -476,7 +477,7 @@ Elif_stmt: ELIF Exp COLON LBRACE Translation_unit RBRACE Elif_stmt
   sprintf($$.begin,"L%d",ln++);
   sprintf($$.end,"L%d",ln++);
   //sprintf($$.code,"elif code");
-  sprintf($$.code,"Label\t \t \t%s\n%sIfFalse\t%s\tgoto\t%s\n%s\ngoto\t \t \t%s\n%s\n",$$.begin,$2.code,$2.lhs,$7.begin,$5.code,$$.end,$7.code);
+  sprintf($$.code,"Label\t \t \t%s\n%sIfFalse\t%s\tgoto\t%s\n%s\ngoto\t \t \t%s\n%s\n",$$.begin,$2.code,$2.lhs,$7.begin,$5.code,final_out,$7.code);
 } 
 | {int l=ln;
   //ln++;
@@ -507,6 +508,7 @@ Else_stmt: ELSE COLON LBRACE Translation_unit RBRACE
   //printf("Label\t \t \tL%d\n",l);
   sprintf($$.begin,"L%d",ln++);
   sprintf($$.end,"L%d",ln++);
+  strcpy(final_out,$$.end);
   //sprintf($$.code,"else code");
   //sprintf($$.code,"Label\t \t \t%s\n%s\ngoto\t \t \t%s\nLabel\t \t \t%s\n",$$.begin,$4.code,$$.end,$$.end);
   sprintf($$.code,"%s\ngoto\t \t \t%s\nLabel\t \t \t%s",$4.code,$$.end,$$.end);
@@ -1127,12 +1129,12 @@ Bit_Exp: Add_Exp
   temp_var[m] = '\0';
 
   sprintf($$.lhs,temp_var);
-  sprintf($$.code,"^\t%s\t%s\t%s\n",$1.lhs,$3.code,temp_var);
+  //sprintf($$.code,"^\t%s\t%s\t%s\n",$1.lhs,$3.code,temp_var);
 
   //printf("\ncode is %s\n",$$.code);
 
   //printf("Quadruple is :\n");
-  printf("%s\n%s\n^\t%s\t%s\t%s\n",$1.code,$3.code,$1.lhs,$3.lhs,temp_var);
+  sprintf($$.code,"%s\n%s\n^\t%s\t%s\t%s\n",$1.code,$3.code,$1.lhs,$3.lhs,temp_var);
 
   //fprintf(fp_quad,"^ \t %s \t %s \t \t%s",$1.lhs,$3.code,temp_var); //op a1 a2 res
   
@@ -1153,12 +1155,12 @@ Bit_Exp: Add_Exp
   temp_var[m] = '\0';
 
   sprintf($$.lhs,temp_var);
-  sprintf($$.code,"%s\n%s\n&\t%s\t%s\t%s\n",$1.code,$3.code,$1.lhs,$3.lhs,temp_var);
+  //sprintf($$.code,"%s\n%s\n&\t%s\t%s\t%s\n",$1.code,$3.code,$1.lhs,$3.lhs,temp_var);
 
   //printf("\ncode is %s\n",$$.code);
 
   //printf("Quadruple is :\n");
-  printf("&\t%s\t%s\t%s\n",$1.lhs,$3.code,temp_var);
+  sprintf($$.code,"%s\n%s\n&\t%s\t%s\t%s\n",$1.code,$3.code,$1.lhs,$3.lhs,temp_var);
 
   //fprintf(fp_quad,"& \t %s \t %s \t \t%s",$1.lhs,$3.code,temp_var); //op a1 a2 res
   
@@ -1178,12 +1180,12 @@ Bit_Exp: Add_Exp
   temp_var[m] = '\0';
 
   sprintf($$.lhs,temp_var);
-  sprintf($$.code,"%s\n%s\n|\t%s\t%s\t%s\n",$1.code,$3.code,$1.lhs,$3.lhs,temp_var);
+  //sprintf($$.code,"%s\n%s\n|\t%s\t%s\t%s\n",$1.code,$3.code,$1.lhs,$3.lhs,temp_var);
 
   //printf("\ncode is %s\n",$$.code);
 
   //printf("Quadruple is :\n");
-  printf("|\t%s\t%s\t%s\n",$1.lhs,$3.code,temp_var);
+  sprintf($$.code,"%s\n%s\n|\t%s\t%s\t%s\n",$1.code,$3.code,$1.lhs,$3.lhs,temp_var);
 
   //fprintf(fp_quad,"| \t %s \t %s \t \t%s",$1.lhs,$3.code,temp_var); //op a1 a2 res
   
