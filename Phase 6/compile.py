@@ -52,7 +52,35 @@ class Operation:
         elif ins=='=':
             self.asm='MOV' #move the constant into register represented by the variable
         elif ins=='+':
-            self.asm='ADD' # continue for the rest
+            self.asm='ADD' #add
+        elif ins=='-':
+            self.asm='SUB' #sub
+        elif ins=='*':
+            self.asm='MUL'
+        elif ins=='/':
+            self.asm='DIV'
+        elif ins=='not':
+            self.asm='MVN'
+        elif ins=='**':
+            self.asm='POW'
+        elif ins=='^':
+            self.asm='EOR'
+        elif ins=='&':
+            self.asm='AND'
+        elif ins=='|':
+            self.asm='ORR'
+"""        elif ins=='>':
+            self.asm='G'
+        elif ins=='>=':
+            self.asm='GE'
+        elif ins=='<':
+            self.asm='Less'
+        elif ins=='<=':
+            self.asm='LE'
+        elif ins=='==':
+            self.asm='EQ'
+        elif ins=='!=':
+            self.asm='NE'"""
 
 
 
@@ -113,6 +141,69 @@ class Instruction:
             dst,code3=RegisterBank.allocate(self.dst)
             code=code1+code2+code3
             code+="\t\t"+self.op.asm+" R"+str(src1)+",R"+str(src2)+",R"+str(dst)+"\n"
+            return code
+        
+        if self.op.ins=='-':
+            src1,code1=RegisterBank.allocate(self.src1)
+            src2,code2=RegisterBank.allocate(self.src2)
+            dst,code3=RegisterBank.allocate(self.dst)
+            code=code1+code2+code3
+            code+="\t\t"+self.op.asm+" R"+str(src1)+",R"+str(src2)+",R"+str(dst)+"\n"
+            return code
+
+        if self.op.ins=='*':
+            src1,code1=RegisterBank.allocate(self.src1)
+            src2,code2=RegisterBank.allocate(self.src2)
+            dst,code3=RegisterBank.allocate(self.dst)
+            code=code1+code2+code3
+            code+="\t\t"+self.op.asm+" R"+str(dst)+",R"+str(src1)+",R"+str(src2)+"\n"
+            return code
+        
+        if self.op.ins=='/':
+            src1,code1=RegisterBank.allocate(self.src1)
+            src2,code2=RegisterBank.allocate(self.src2)
+            dst,code3=RegisterBank.allocate(self.dst)
+            code=code1+code2+code3
+            code+="\t\t"+self.op.asm+" R"+str(dst)+",R"+str(src1)+",R"+str(src2)+"\n"
+            return code
+        
+        if self.op.ins=='not':
+            src1,code1=RegisterBank.allocate(self.src1)
+            dst,code2=RegisterBank.allocate(self.dst)
+            code=code1+code2
+            code+="\t\t"+self.op.asm+" R"+str(dst)+",R"+str(src1)+"\n"
+            return code
+        
+        if self.op.ins=='**':
+            src1,code1=RegisterBank.allocate(self.src1)
+            src2,code2=RegisterBank.allocate(self.src2)
+            dst,code3=RegisterBank.allocate(self.dst)
+            code=code1+code2+code3
+            code+="\t\t"+self.op.asm+" R"+str(dst)+",R"+str(src1)+",R"+str(src2)+"\n"
+            return code
+        
+        if self.op.ins=='^':
+            src1,code1=RegisterBank.allocate(self.src1)
+            src2,code2=RegisterBank.allocate(self.src2)
+            dst,code3=RegisterBank.allocate(self.dst)
+            code=code1+code2+code3
+            code+="\t\t"+self.op.asm+" R"+str(dst)+",R"+str(src1)+",R"+str(src2)+"\n"
+            return code
+        
+        if self.op.ins=='&':
+            src1,code1=RegisterBank.allocate(self.src1)
+            src2,code2=RegisterBank.allocate(self.src2)
+            dst,code3=RegisterBank.allocate(self.dst)
+            code=code1+code2+code3
+            code+="\t\t"+self.op.asm+" R"+str(dst)+",R"+str(src1)+",R"+str(src2)+"\n"
+            return code
+        
+        if self.op.ins=='|':
+            src1,code1=RegisterBank.allocate(self.src1)
+            src2,code2=RegisterBank.allocate(self.src2)
+            dst,code3=RegisterBank.allocate(self.dst)
+            code=code1+code2+code3
+            code+="\t\t"+self.op.asm+" R"+str(dst)+",R"+str(src1)+",R"+str(src2)+"\n"
             return code
         
         if self.op.ins=='=':
