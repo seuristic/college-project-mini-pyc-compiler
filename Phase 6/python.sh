@@ -16,7 +16,7 @@ if [[ $# -eq 2 ]]; then
         fi
     elif [[ $1 == "-I1" ]] || [[ $1 == "-i1" ]]; then 
         if test -f "$2"; then
-            fbname=$(basename "$2" .py).S
+            fbname=$(basename "$2" .py).I
             cat $2 | ./python.out | python opt1.py > $fbname
         else
             echo -e "python: \033[1;31m error: \033[0m no input file\nusage: ./python.sh [-option] <inputfile>.py"
@@ -25,7 +25,7 @@ if [[ $# -eq 2 ]]; then
         fi
     elif [[ $1 == "-I0" ]] || [[ $1 == "-i0" ]]; then 
         if test -f "$2"; then
-            fbname=$(basename "$2" .py).S
+            fbname=$(basename "$2" .py).I
             cat $2 | ./python.out > $fbname
         else
             echo -e "python: \033[1;31m error: \033[0m no input file\nusage: ./python.sh [-option] <inputfile>.py"

@@ -43,8 +43,6 @@ class Operation:
             self.asm="L" #label
         elif ins=='goto':
             self.asm="B" #unconditional branch
-        elif ins=='IfFalse' or ins[0]=="If" or ins[0]=='IfTrue':
-            self.asm="BEQ" #conditional branch
         elif ins=='call':
             self.asm="BL" #branch and link (function call)
         elif ins=='param':
@@ -69,19 +67,6 @@ class Operation:
             self.asm='AND'
         elif ins=='|':
             self.asm='ORR'
-"""        elif ins=='>':
-            self.asm='G'
-        elif ins=='>=':
-            self.asm='GE'
-        elif ins=='<':
-            self.asm='Less'
-        elif ins=='<=':
-            self.asm='LE'
-        elif ins=='==':
-            self.asm='EQ'
-        elif ins=='!=':
-            self.asm='NE'"""
-
 
 
 class RegisterBank:
@@ -103,10 +88,12 @@ class RegisterBank:
 
     @staticmethod
     def algorithm(var):
+        print(var)
         if var in RegisterBank.var_map:
-            return var_map[var],''
+            return RegisterBank.var_map[var],''
         if len(RegisterBank.unallocated)>0:
             for i in RegisterBank.unallocated:
+                print("LDR R"+str(i)+",="+var.name+"\n")
                 code="\t\tLDR R"+str(i)+",="+var.name+"\n"
                 return i,code
         else:
@@ -122,7 +109,8 @@ class RegisterBank:
     def allocate(var):
         reg,code=RegisterBank.algorithm(var)
         RegisterBank.allocated.add(reg)
-        RegisterBank.unallocated.remove(reg)
+        if reg in RegisterBank.unallocated:
+            RegisterBank.unallocated.remove(reg)
         RegisterBank.register_map[reg]=var
         RegisterBank.var_map[var]=reg
         return reg,code
@@ -135,86 +123,145 @@ class Instruction:
         self.dst=ins[3]
     
     def convert(self):
-        if self.op.ins=='+':
-            src1,code1=RegisterBank.allocate(self.src1)
-            src2,code2=RegisterBank.allocate(self.src2)
-            dst,code3=RegisterBank.allocate(self.dst)
+        #print(self.op.ins)
+        #print(self.src1,self.src2,self.dst)
+        if self.op.ins=='+' or self.op.ins=='-' or self.op.ins=='*' or self.op.ins=='/' or self.op.ins=='**' or self.op.ins=='^' or self.op.ins=='&' or self.op.ins=='|':
+            if isinstance(self.src1, str):
+                src1="#"+self.src1
+                code1=""
+            else:
+                src1,code1=RegisterBank.allocate(self.src1)
+                src1="R"+str(src1)
+            if isinstance(self.src2, str):
+                src2="#"+self.src2
+                code2=""
+            else:
+                src2,code2=RegisterBank.allocate(self.src2)
+                src2="R"+str(src2)
+            if isinstance(self.dst, str):
+                dst="#"+self.dst
+                code3=""
+            else:
+                dst,code3=RegisterBank.allocate(self.dst)
+                dst="R"+str(dst)
             code=code1+code2+code3
-            code+="\t\t"+self.op.asm+" R"+str(src1)+",R"+str(src2)+",R"+str(dst)+"\n"
-            return code
-        
-        if self.op.ins=='-':
-            src1,code1=RegisterBank.allocate(self.src1)
-            src2,code2=RegisterBank.allocate(self.src2)
-            dst,code3=RegisterBank.allocate(self.dst)
-            code=code1+code2+code3
-            code+="\t\t"+self.op.asm+" R"+str(src1)+",R"+str(src2)+",R"+str(dst)+"\n"
-            return code
-
-        if self.op.ins=='*':
-            src1,code1=RegisterBank.allocate(self.src1)
-            src2,code2=RegisterBank.allocate(self.src2)
-            dst,code3=RegisterBank.allocate(self.dst)
-            code=code1+code2+code3
-            code+="\t\t"+self.op.asm+" R"+str(dst)+",R"+str(src1)+",R"+str(src2)+"\n"
-            return code
-        
-        if self.op.ins=='/':
-            src1,code1=RegisterBank.allocate(self.src1)
-            src2,code2=RegisterBank.allocate(self.src2)
-            dst,code3=RegisterBank.allocate(self.dst)
-            code=code1+code2+code3
-            code+="\t\t"+self.op.asm+" R"+str(dst)+",R"+str(src1)+",R"+str(src2)+"\n"
+            code+="\t\t"+self.op.asm+" "+dst+","+src1+","+src2+"\n"
             return code
         
         if self.op.ins=='not':
-            src1,code1=RegisterBank.allocate(self.src1)
-            dst,code2=RegisterBank.allocate(self.dst)
+            if isinstance(self.src1, str):
+                src1="#"+self.src1
+                code1=""
+            else:
+                src1,code1=RegisterBank.allocate(self.src1)
+                src1="R"+str(src1)
+            if isinstance(self.dst, str):
+                dst="#"+self.dst
+                code2=""
+            else:
+                dst,code2=RegisterBank.allocate(self.dst)
+                dst="R"+str(dst)
             code=code1+code2
-            code+="\t\t"+self.op.asm+" R"+str(dst)+",R"+str(src1)+"\n"
-            return code
-        
-        if self.op.ins=='**':
-            src1,code1=RegisterBank.allocate(self.src1)
-            src2,code2=RegisterBank.allocate(self.src2)
-            dst,code3=RegisterBank.allocate(self.dst)
-            code=code1+code2+code3
-            code+="\t\t"+self.op.asm+" R"+str(dst)+",R"+str(src1)+",R"+str(src2)+"\n"
-            return code
-        
-        if self.op.ins=='^':
-            src1,code1=RegisterBank.allocate(self.src1)
-            src2,code2=RegisterBank.allocate(self.src2)
-            dst,code3=RegisterBank.allocate(self.dst)
-            code=code1+code2+code3
-            code+="\t\t"+self.op.asm+" R"+str(dst)+",R"+str(src1)+",R"+str(src2)+"\n"
-            return code
-        
-        if self.op.ins=='&':
-            src1,code1=RegisterBank.allocate(self.src1)
-            src2,code2=RegisterBank.allocate(self.src2)
-            dst,code3=RegisterBank.allocate(self.dst)
-            code=code1+code2+code3
-            code+="\t\t"+self.op.asm+" R"+str(dst)+",R"+str(src1)+",R"+str(src2)+"\n"
-            return code
-        
-        if self.op.ins=='|':
-            src1,code1=RegisterBank.allocate(self.src1)
-            src2,code2=RegisterBank.allocate(self.src2)
-            dst,code3=RegisterBank.allocate(self.dst)
-            code=code1+code2+code3
-            code+="\t\t"+self.op.asm+" R"+str(dst)+",R"+str(src1)+",R"+str(src2)+"\n"
+            code+="\t\t"+self.op.asm+" "+dst+","+src1+"\n"
             return code
         
         if self.op.ins=='=':
             dst,code=RegisterBank.allocate(self.dst)
-            if type(self.src1)==Variable: #variable is being equated
+            if isinstance(self.src1, str): #constant is being equated
+                src1="#"+self.src1
+            else: #variable is being equated
                 src1,code1=RegisterBank.allocate(self.src1)
                 code+=code
                 src1="R"+str(src1)
-            else: #constant is being equated
+            code+="\t\tMOV R"+str(dst)+","+src1+"\n"
+            return code
+
+        if self.op.ins=='goto':
+            code="\t\t"+self.op.asm+" "+self.dst+"\n"
+            return code
+        
+        if self.op.ins=='Label':
+            code="\t\t"+self.dst+":\n"
+            return code
+        
+        if self.op.ins=='call':
+            code="\t\t"+self.op.asm+" "+self.src2+"\n"
+            return code
+
+        if self.op.ins=='IfFalse':
+            if isinstance(self.src1, str):
                 src1="#"+self.src1
-            code+="\t\tMOV R"+str(dst)+","+src1
+                code1=""
+            else:
+                src1,code1=RegisterBank.allocate(self.src1)
+                src1="R"+str(src1)
+            code=code1
+            code+="\t\tCMP "+src1+",#0\n"
+            code+="\t\tBEQ "+self.dst+"\n"
+            return code
+        
+        if self.op.ins=="If" or self.op.ins=='IfTrue':
+            if isinstance(self.src1, str):
+                src1="#"+self.src1
+                code1=""
+            else:
+                src1,code1=RegisterBank.allocate(self.src1)
+                src1="R"+str(src1)
+            code=code1
+            code+="\t\tCMP "+src1+",#0\n"
+            code+="\t\tBNE "+self.dst+"\n"
+            return code
+
+        if self.op.ins=="param":
+            if isinstance(self.dst, str):
+                dst="#"+self.dst
+                code1=""
+            else:
+                dst,code1=RegisterBank.allocate(self.dst)
+                dst="R"+str(dst)
+            code=code1
+            code+="\t\tPUSH {"+dst+"}\n"
+            return code
+
+        if self.op.ins==">=" or self.op.ins=="<=" or self.op.ins==">" or self.op.ins=="<" or self.op.ins=="==" or self.op.ins=="!=":
+            if isinstance(self.src1, str):
+                src1="#"+self.src1
+                code1=""
+            else:
+                src1,code1=RegisterBank.allocate(self.src1)
+                src1="R"+str(src1)
+            if isinstance(self.src2, str):
+                src2="#"+self.src2
+                code2=""
+            else:
+                src2,code2=RegisterBank.allocate(self.src2)
+                src2="R"+str(src2)
+            if isinstance(self.dst, str):
+                dst="#"+self.dst
+                code3=""
+            else:
+                dst,code3=RegisterBank.allocate(self.dst)
+                dst="R"+str(dst)
+            code=code1+code2+code3
+            code+="\t\tCMP "+src1+","+src2+"\n"
+            if self.op.ins==">=":
+                code+="\t\tMOVGE "+dst+",#1"+"\n"
+                code+="\t\tMOVLT "+dst+",#0"+"\n"
+            elif self.op.ins=="<=":
+                code+="\t\tMOVLE "+dst+",#1"+"\n"
+                code+="\t\tMOVGT "+dst+",#0"+"\n"
+            elif self.op.ins==">":
+                code+="\t\tMOVGT "+dst+",#1"+"\n"
+                code+="\t\tMOVLE "+dst+",#0"+"\n"
+            elif self.op.ins=="<":
+                code+="\t\tMOVLT "+dst+",#1"+"\n"
+                code+="\t\tMOVGE "+dst+",#0"+"\n"
+            elif self.op.ins=="==":
+                code+="\t\tMOVEQ "+dst+",#1"+"\n"
+                code+="\t\tMOVNE "+dst+",#0"+"\n"
+            elif self.op.ins=="!=":
+                code+="\t\tMOVNE "+dst+",#1"+"\n"
+                code+="\t\tMOVEQ "+dst+",#0"+"\n"
             return code
         
 lines=[]        
@@ -223,7 +270,7 @@ for line in stdin:
     temp=line.strip().split("\t")
     if temp!=['']:
         lines.append(temp)
-
+#print(lines)
 def next_use_algorithm(program):
     symTable={}
     for i in range(len(program)):
@@ -231,7 +278,7 @@ def next_use_algorithm(program):
         if program[i][0] in ('call','Label','goto'):
             continue 
 
-        elif program[i][0]=='IfFalse':
+        elif program[i][0]=='IfFalse' or program[i][0] == 'If' or program[i][0] == 'IfTrue':
             if is_variable(program[i][1]):
                 program[i][1]=Variable(program[i][1],None) 
                 symTable[program[i][1]]=Variable(program[i][1].name,None)
@@ -263,7 +310,7 @@ def next_use_algorithm(program):
         if program[i][0] in ('call','Label','goto'):
             continue 
 
-        elif program[i][0] == 'IfFalse':
+        elif program[i][0] == 'IfFalse' or program[i][0] == 'If' or program[i][0] == 'IfTrue':
             if type(program[i][1])==Variable:
                 if program[i][1] in symTable:
                     x=symTable[program[i][1]]
@@ -312,22 +359,21 @@ def translate(program):
     asm_code="""\t\tAREA     ARMex, CODE, READONLY\n\t\tENTRY                   ; Mark first instruction to execute\n\n\t\t.text\n\nstart:\n"""
     
     for i in program:
-        try:
+        #try:
             asm_code+=i.convert()
-        except:
-            continue
+        #except:
+            #continue
     
     asm_code+="""\nstop:\n\t\tMOV      r0, #0x18      ; angel_SWIreason_ReportException\n\t\tLDR      r1, =0x20026   ; ADP_Stopped_ApplicationExit\n\t\tSVC      #0x123456      ; ARM semihosting (formerly SWI)\n"""
     asm_code+="\n\t\t.data\n"
 
     for i in symTable:
-        asm_code+=str(i)+": 0"
+        asm_code+=str(i)+": 0"+"\n"
 
     return asm_code
 
 asm_code=translate(lines)
 print(asm_code)
-
 
 
             
