@@ -639,7 +639,7 @@ Const: CINT
   add_child($$.node,create_node(NULL,$$.value,0));*/
 
   //printf("in const cint %s\n",$1);
-  strcpy($$.lhs,$1);
+  //strcpy($$.lhs,$1);
   sprintf($$.lhs,"%s",$1);
   exprno=0;
 
@@ -652,7 +652,7 @@ Const: CINT
   /*$$.node = create_node(NULL,"CFLOAT",0);
   add_child($$.node,create_node(NULL,$$.value,0));*/
 
-  strcpy($$.code,$1);
+  //strcpy($$.code,$1);
   sprintf($$.lhs,"%s",$1);
   exprno=0;
 
@@ -665,7 +665,7 @@ Const: CINT
   /*$$.node = create_node(NULL,"CSTR",0);
   add_child($$.node,create_node(NULL,$$.value,0));*/
 
-  strcpy($$.code,$1);
+  //strcpy($$.code,$1);
   sprintf($$.lhs,"%s",$1);
   exprno=0;
 
@@ -677,7 +677,7 @@ Const: CINT
   strcpy($$.value,$1);
   /*$$.node = create_node(NULL,"TRUE",0);
   add_child($$.node,create_node(NULL,$$.value,0));*/
-  strcpy($$.code,$1);
+  //strcpy($$.code,$1);
   sprintf($$.lhs,"%s",$1);
   exprno=0;
 
@@ -691,7 +691,7 @@ Const: CINT
   /*$$.node = create_node(NULL,"FALSE",0);
   add_child($$.node,create_node(NULL,$$.value,0));*/
 
-  strcpy($$.code,$1);
+  //strcpy($$.code,$1);
   sprintf($$.lhs,"%s",$1);
   exprno=0;
 
@@ -703,7 +703,7 @@ Const: CINT
   strcpy($$.value,$1);
   /*$$.node = create_node(NULL,"NONE",0);
   add_child($$.node,create_node(NULL,$$.value,0));*/
-  strcpy($$.code,$1);
+  //strcpy($$.code,$1);
   sprintf($$.lhs,"%s",$1);
   exprno=0;
 
@@ -1342,6 +1342,14 @@ And_Exp: In_Exp
   add_sibling($$.node,create_node(NULL,"and",0));
   add_sibling($$.node,create_node(NULL,"And_Exp",0));
   add_child(end_node($$.node),$3.node);*/
+  
+  sprintf(temp_var,"t%d",tempno++);
+  m = strlen(temp_var);
+  temp_var[m] = '\0';
+
+  strcpy($$.lhs,temp_var);
+
+  sprintf($$.code,"%s%s\nand\t%s\t%s\t%s\n",$1.code,$3.code,$1.lhs,$3.lhs,temp_var);
 
 
 }
@@ -1363,6 +1371,17 @@ Or_Exp: And_Exp
   add_sibling($$.node,create_node(NULL,"or",0));
   add_sibling($$.node,create_node(NULL,"Or_Exp",0));
   add_child(end_node($$.node),$3.node);*/
+
+  sprintf(temp_var,"t%d",tempno++);
+  m = strlen(temp_var);
+  temp_var[m] = '\0';
+
+  strcpy($$.lhs,temp_var);
+
+  sprintf($$.code,"%s%s\nor\t%s\t%s\t%s\n",$1.code,$3.code,$1.lhs,$3.lhs,temp_var);
+
+
+
 }
 ;
 
