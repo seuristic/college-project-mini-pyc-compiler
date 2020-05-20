@@ -88,12 +88,12 @@ class RegisterBank:
 
     @staticmethod
     def algorithm(var):
-        print(var)
+        #print(var)
         if var in RegisterBank.var_map:
             return RegisterBank.var_map[var],''
         if len(RegisterBank.unallocated)>0:
             for i in RegisterBank.unallocated:
-                print("LDR R"+str(i)+",="+var.name+"\n")
+                #print("LDR R"+str(i)+",="+var.name+"\n")
                 code="\t\tLDR R"+str(i)+",="+var.name+"\n"
                 return i,code
         else:
