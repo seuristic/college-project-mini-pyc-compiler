@@ -1,85 +1,102 @@
 %{
 #include <stdio.h> 
 #include<stdlib.h>
-int lineno = 1; // initialize to 1
+
+#define ID "ID"
+#define LITERAL "LITERAL"
+#define KEYWORD "KEYWORD"
+#define SYMBOL "SYMBOL"
+#define OPERATOR "OPERATOR"
+
+// initialize to 1
+int lineNo = 1;
+
+void printToken(char* type, char* token) {
+    printf("%-17s%-16s%d\n", type, token, lineNo);
+}
+
+void printError(int flag) {
+    if (!flag) printf("\n❌ WRONG identifier at line no. %d\n\n", lineNo);
+    else printf("\n❔ UNDEFINED symbol at line no. %d\n\n", lineNo);
+}
 
 %} 
+
 %% 
 \. {}
-\n { lineno+=1; }
+\n { lineNo += 1; }
 #.* {}
 [ ] {}
 \t {}
-False {}
-None {}
-True {}
-and {}
-break {}
-continue {}
-elif {}
-del {}
-else {}
-for {}
-if {}
-in {}
-not {}
-or {}
-while {}
-input  {}
-print {}
-int {}
-float {}
-str {}
-list {}
-split {}
-map {}
-append {}
-pop {}
-insert  {}
-len {}
-range {}
->= {}
-\<=  {}
-== {}
-\!= {}
-; {}
-: {}
-, {}
-(\".*\")|(\'.*\') {}
-\*\* {}
-\* {}
-\/ {}
+False |
+None |
+True { printToken(LITERAL, yytext); }
+and |
+break |
+continue |
+elif |
+del |
+else |
+for |
+if |
+in |
+not |
+or |
+while |
+input  |
+print |
+int |
+float |
+str |
+list |
+split |
+map |
+append |
+pop |
+insert  |
+len |
+range { printToken(KEYWORD, yytext); }
+>= |
+\<=  |
+== |
+\!= { printToken(OPERATOR, yytext); }
+; |
+: |
+, { printToken(SYMBOL, yytext); }
+(\".*\")|(\'.*\') { printToken(LITERAL, yytext); }
+\*\* |
+\* |
+\/ { printToken(SYMBOL, yytext); }
 \/\/ {}
-\% {}
-\+ {}
-\- {}
-= {}
-\< {}
-> {}
-\^ {}
-\&  {}
-\| {}
-\{ {}
-\} {}
-\( {}
-\) {}
-\[ {}
-\] {}
-[a-zA-Z_][a-zA-Z0-9_]* {}
-^[^a-zA-Z _] {printf("wrong identifier at line no %d\n",lineno);}
-[0-9]+ {}
-[0-9]+\.[0-9]+ {}
-. {printf("undefined symbol at line no %d\n",lineno);}
-
+\% |
+\+ |
+\- |
+= |
+\< |
+> |
+\^ |
+\&  |
+\| { printToken(OPERATOR, yytext); }
+\{ |
+\} |
+\( |
+\) |
+\[ |
+\] { printToken(SYMBOL, yytext); }
+[a-zA-Z_][a-zA-Z0-9_]* { printToken(ID, yytext); }
+^[^a-zA-Z _] { printError(0); }
+[0-9]+ |
+[0-9]+\.[0-9]+ { printToken(LITERAL, yytext); }
+. { printError(1); }
 %% 
 
-int yywrap()  
-{  
+int yywrap() {  
     return 1;
 } 
 
-
-int main()
-{
-	yylex();
+int main() {
+    printf("-----------------------------------------\n");
+    printf("TOKEN \t\t TYPE \t\t LINE NO.\n");
+    printf("-----------------------------------------\n");
+    yylex();
 }

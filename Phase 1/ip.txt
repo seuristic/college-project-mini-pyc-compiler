@@ -1,6 +1,7 @@
 #a=9;99b;=88
 1a = 9;
 a12=9;
+p[1]=a12;
 @@
 print("hello");
 ##comment
@@ -8,3 +9,4 @@ for i in range(10):
 {
 	print(i);
 }
+

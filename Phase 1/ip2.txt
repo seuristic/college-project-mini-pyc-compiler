@@ -1,0 +1,9 @@
+a=10;
+b=20;
+c=a*b;
+d=c*a+b;
+print(d);
+if(a==b):
+    print("a is equal to b");
+for i in range(b):
+    print("b is iterating");
