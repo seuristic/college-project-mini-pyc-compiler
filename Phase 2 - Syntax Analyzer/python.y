@@ -4,19 +4,17 @@
 #include "y.tab.h"
 #include<string.h>
 
-typedef struct Node
-{
+typedef struct Node {
 	struct Node *parent;
 	struct Node *sibling;
-  struct Node *child;
+    struct Node *child;
 	char *token;
-  int leaf;
-}Node;
+    int leaf;
+} Node;
 
-typedef struct tree
-{
+typedef struct tree {
 	Node *node;
-}tree;
+} tree;
 
 tree *tree_init();
 Node* create_node(Node *parent, char *token, int leaf);
@@ -24,69 +22,58 @@ void push(Node* node);
 void printTree(tree* T);
 void print(Node* node);
 
-tree *tree_init()
-{
+tree *tree_init() {
 	tree *temp= (tree*)malloc(sizeof(tree));
 	temp->node = NULL;
-  return(temp);
+    return(temp);
 }
 
-Node* create_node(Node *parent, char *token, int leaf) 
-{
+Node* create_node(Node *parent, char *token, int leaf) {
 	Node *newnode = (Node*)malloc(sizeof(Node));
-  newnode->token = (char*)malloc(strlen(token)*sizeof(char));
+    newnode->token = (char*)malloc(strlen(token)*sizeof(char));
 	strcpy(newnode->token, token);
 	newnode->parent = parent;
 	newnode->sibling = NULL;
-  newnode->child = NULL;
-  newnode->leaf=leaf;
+    newnode->child = NULL;
+    newnode->leaf=leaf;
 	return(newnode);
 }
 
-void print(Node* node) 
-{ 
+void print(Node* node) { 
     if(node == NULL) 
         return; 
-
-    printf("%s ",node->token);
+    printf("%s\n",node->token);
     print(node->child);  
     print(node->sibling); 
 }
 
-void printTree(tree* T)
-{
+void printTree(tree* T) {
   print(T->node);
   printf("\n");
 }
 
-void first_val(char *first, char *temp)
-{
+void first_val(char *first, char *temp) {
     int i=0;int n=strlen(first);
-    while(i<n && first[i]!=',')
-    {
-      temp[i]=first[i];i++;
+    while(i<n && first[i]!=',') {
+      temp[i]=first[i];
+      i++;
     }
 }
 
-void expand(char *str, char *temp)
-{
+void expand(char *str, char *temp) {
   char *pt;int a=0,b=0,c=0,i=0; char buffer[1024]="";
   pt = strtok(str,",");
-  if(pt==NULL)
-  {
-    if(strlen(str)==0)
-    {
-    strcat(temp,"");
-    return;
+  if(pt==NULL) {
+    if(strlen(str)==0) {
+      strcat(temp,"");
+      return;
     }
   }
   a=atoi(pt);
   pt = strtok(NULL,",");
-  if(pt==NULL)
-  {
+  if(pt==NULL) {
     i=0;
-    while(i<a-1)
-    {
+    while(i<a-1) {
       sprintf(buffer,"%d",i);
       strcat(temp,buffer);strcat(temp,",");
       i++;
@@ -97,11 +84,9 @@ void expand(char *str, char *temp)
   }
   b=atoi(pt);
   pt = strtok (NULL,",");
-  if(pt==NULL)
-  {
+  if(pt==NULL) {
     i=a;
-    while(i<b-1)
-    {
+    while(i<b-1) {
       sprintf(buffer,"%d",i);
       strcat(temp,buffer);strcat(temp,",");
       i++;
@@ -112,23 +97,18 @@ void expand(char *str, char *temp)
   }  
   c=atoi(pt);
   i=a;
-  if(c>0)
-  {
-  while(i<b-c)
-  {
+  if(c>0) {
+    while(i<b-c) {
+      sprintf(buffer,"%d",i);
+      strcat(temp,buffer);strcat(temp,",");
+      i+=c;
+    }
     sprintf(buffer,"%d",i);
-    strcat(temp,buffer);strcat(temp,",");
-    i+=c;
+    strcat(temp,buffer);
+    return;
   }
-  sprintf(buffer,"%d",i);
-  strcat(temp,buffer);
-  return;
-  }
-  else 
-  {
-
-    while(i>b-c)
-    {
+  else {
+    while(i>b-c) {
       sprintf(buffer,"%d",i);
       strcat(temp,buffer);strcat(temp,",");
       i+=c;
@@ -137,11 +117,9 @@ void expand(char *str, char *temp)
     strcat(temp,buffer);
     return; 
   }
-
 }
 
-void len(char *val,char *temp)
-{
+void len(char *val,char *temp) {
   int t=strlen(val);
   t=t-t/2;
   sprintf(temp,"%d",t);
@@ -149,20 +127,16 @@ void len(char *val,char *temp)
 
 tree *head = NULL;
 
-void add_child(Node* parent, Node* child)
-{
+void add_child(Node* parent, Node* child) {
   if(parent==NULL)
     return;
   
-  if(parent->child==NULL)
-  {
+  if(parent->child==NULL) {
     parent->child = child;
   }
-  else
-  {
+  else {
     Node *n = parent->child;
-    while(n->sibling!=NULL)
-    {
+    while(n->sibling!=NULL) {
       n=n->sibling;
     }
     n->sibling = child;
@@ -170,43 +144,34 @@ void add_child(Node* parent, Node* child)
   child->parent = parent;
 }
 
-void add_sibling(Node* left, Node* new)
-{
-  if(left==NULL)
-  {
+void add_sibling(Node* left, Node* new) {
+  if(left==NULL) {
     left = new;
     return;
   }
   
-  if(left->sibling==NULL)
-  {
+  if(left->sibling==NULL) {
     left->sibling = new;
   }
-  else
-  {
+  else {
     Node *n = left;
-    while(n->sibling!=NULL)
-    {
+    while(n->sibling!=NULL) {
       n=n->sibling;
     }
     n->sibling = new;
   }
 }
 
-Node* end_node(Node* left)
-{
+Node* end_node(Node* left) {
   if(left==NULL)
     return NULL;
   
-  if(left->sibling==NULL)
-  {
+  if(left->sibling==NULL) {
     return left;
   }
-  else
-  {
+  else {
     Node *n = left;
-    while(n->sibling!=NULL)
-    {
+    while(n->sibling!=NULL) {
       n=n->sibling;
     }
     return n;
@@ -773,19 +738,20 @@ Or_Exp: And_Exp
 ;
 
 %% 
-int yyerror(char *msg) 
-{ 
-  printf("Syntax Error\n"); 
+
+int yyerror(char *msg) { 
+  printf("\n⚠️  Syntax Error\n\n"); 
   return 1;
 } 
  
-int main() 
-{ 
+int main() { 
   head = tree_init();
   head->node = create_node(NULL,"Start",0);
   yyparse(); 
   display_symbol();
-  printf("\n\nAbstract Syntax Tree\n\n");
+  printf("\n--------------------\n");
+  printf("Abstract Syntax Tree");
+  printf("\n--------------------\n");
   printTree(head);
   return 1;
 }

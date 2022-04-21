@@ -97,7 +97,7 @@ int yywrap() {
 
 int main() {
     printf("-----------------------------------------\n");
-    printf("TOKEN \t\t TYPE \t\t LINE NO.\n");
+    printf("TYPE \t\t TOKEN \t\t LINE NO.\n");
     printf("-----------------------------------------\n");
     yylex();
 }

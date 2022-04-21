@@ -1,5 +1,5 @@
 #a=9;bdvs=88
-a=9;
+1a=9;
 a12=9;
 print("hello");
 ##comment
