@@ -7,6 +7,7 @@
 #define KEYWORD "KEYWORD"
 #define SYMBOL "SYMBOL"
 #define OPERATOR "OPERATOR"
+#define SEPERATOR "SEPERATOR"
 
 // initialize to 1
 int lineNo = 1;
@@ -17,7 +18,7 @@ void printToken(char* type, char* token) {
 
 void printError(int flag) {
     if (!flag) printf("\n❌ WRONG identifier at line no. %d\n\n", lineNo);
-    else printf("\n❔ UNDEFINED symbol at line no. %d\n\n", lineNo);
+    else printf("❔ UNDEFINED symbol at line no. %d\n\n", lineNo);
 }
 
 %} 
@@ -62,7 +63,7 @@ range { printToken(KEYWORD, yytext); }
 \!= { printToken(OPERATOR, yytext); }
 ; |
 : |
-, { printToken(SYMBOL, yytext); }
+, { printToken(SEPERATOR, yytext); }
 (\".*\")|(\'.*\') { printToken(LITERAL, yytext); }
 \*\* |
 \* |
@@ -82,7 +83,7 @@ range { printToken(KEYWORD, yytext); }
 \( |
 \) |
 \[ |
-\] { printToken(SYMBOL, yytext); }
+\] { printToken(SEPERATOR, yytext); }
 [a-zA-Z_][a-zA-Z0-9_]* { printToken(ID, yytext); }
 ^[^a-zA-Z _] { printError(0); }
 [0-9]+ |
