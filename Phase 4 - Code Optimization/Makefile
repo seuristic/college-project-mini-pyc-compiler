@@ -3,6 +3,6 @@ a.out: y.tab.c lex.yy.c
 lex.yy.c: python.l 
 	lex python.l 
 y.tab.c: python.y 
-	yacc python.y -d
+	yacc python.y -dy
 clean: 
 	rm -rf a.out lex.yy.c y.tab.c y.tab.h

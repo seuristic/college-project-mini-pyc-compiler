@@ -1058,12 +1058,6 @@ Add_Exp: Mul_Exp
 }
 | Add_Exp ADD Mul_Exp 
 {
-  /*$$.node = create_node(NULL,"Add_Exp",0); 
-  add_child($$.node,$1.node);
-  add_sibling($$.node,create_node(NULL,"+",0));
-  add_sibling($$.node,create_node(NULL,"Mul_Exp",0));
-  add_child(end_node($$.node),$3.node);*/
-
   sprintf(temp_var,"t%d",tempno++);
   m = strlen(temp_var);
   temp_var[m] = '\0';
@@ -1224,6 +1218,9 @@ int yyerror(char *msg) {
  
 int main() { 
   Quad *allQuads = (Quad*)malloc(sizeof(Quad));
+  printf("----------------------------\n");
+  printf("Intermediate Code Generation\n");
+  printf("----------------------------\n");
   yyparse(); 
   return 0;
 }

@@ -24,7 +24,7 @@ int hashCode(char* name) {
 
 void disp_line(list *l) {
     list* p=l;
-    printf("\t[%d",l->num);
+    printf("[%d",l->num);
     while(p->next!=NULL) {
         p=p->next;
         printf(",%d",p->num);
@@ -35,10 +35,12 @@ void disp_line(list *l) {
 
 void display_symbol() {
     int i = 0;
-    printf("\tTYPE\tNAME\tDATA-TYPE\tVALUE\tLINE-NO\n\n");
+    printf("-------------------------------------------------\n");
+    printf("TYPE \t TOKEN \t DATATYPE \t VALUE \t LINE NO.\n");
+    printf("-------------------------------------------------\n");
     for(i = 0; i<SIZE; i++) {
         if(hashArray[i] != NULL) {
-            printf("\t%s\t%s\t%s\t\t%s",hashArray[i]->type,hashArray[i]->name,hashArray[i]->datatype,hashArray[i]->value);
+            printf("%-9s%-8s%-16s%-8s",hashArray[i]->type,hashArray[i]->name,hashArray[i]->datatype,hashArray[i]->value);
             disp_line(hashArray[i]->line);
         }
     }
@@ -90,7 +92,8 @@ void insert_exist(DataItem* item, char* datatype, char* value, int line) {
             else if(value==NULL) {
                 free(hashArray[hashIndex]->value);
                 hashArray[hashIndex]->value = NULL;
-            } else {
+            }
+            else {
                 hashArray[hashIndex]->value = string_init(value);
             }
 

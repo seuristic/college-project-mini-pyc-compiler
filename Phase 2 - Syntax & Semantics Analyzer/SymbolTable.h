@@ -6,7 +6,7 @@
 typedef struct list {
     int num;
     struct list* next;
-}list;
+} list;
 
 typedef struct DataItem {
     char* type;   //Keyword or identifier
@@ -14,7 +14,7 @@ typedef struct DataItem {
     char* datatype;
     char* value;
     list* line;
-}DataItem;
+} DataItem;
 
 DataItem* hashArray[SIZE]; 
 
