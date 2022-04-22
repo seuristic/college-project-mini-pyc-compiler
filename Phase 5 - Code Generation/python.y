@@ -1386,24 +1386,15 @@ Or_Exp: And_Exp
 ;
 
 %% 
-int yyerror(char *msg) 
-{ 
+
+int yyerror(char *msg) { 
   printf("Syntax Error\n"); 
   return 1;
 } 
  
-int main() 
-{ 
+int main() { 
   Quad *allQuads = (Quad*)malloc(sizeof(Quad));
-
-  //head = tree_init();
-  //head->node = create_node(NULL,"Start",0);
   yyparse(); 
-  //printf("Symbol Table");
-  //display_symbol();
-  //printf("\n\nAbstract Syntax Tree\n\n");
-  //printTree(head);
-  
   return 0;
 }
 

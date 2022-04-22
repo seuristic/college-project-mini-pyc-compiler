@@ -7,13 +7,13 @@
 
 extern FILE *yyin;
 extern FILE *yyout;
-int lineno = 1; // initialize to 1
+int lineNo = 1; // initialize to 1
 void ret_print(char* token_type);
 
 %} 
 %% 
 \. { ret_print("DOT");  strcpy(yylval.val,yytext);return DOT; }
-\n { lineno+=1;}
+\n { lineNo+=1;}
 #.* {}
 [ ] {}
 \t {}
@@ -72,26 +72,16 @@ range { ret_print("RANGE");  strcpy(yylval.val,yytext);return RANGE;}
 \) { ret_print("RPAREN");  strcpy(yylval.val,yytext);return RPAREN;}
 \[ { ret_print("LBRACKET");  strcpy(yylval.val,yytext);return LBRACKET;}
 \] { ret_print("RBRACKET");  strcpy(yylval.val,yytext);return RBRACKET;}
-[a-zA-Z_][a-zA-Z0-9_]* { ret_print("ID"); insert("ID",yytext,NULL,NULL,lineno); yylval.ctype.type=-1;strcpy(yylval.ctype.value,yytext);return ID;}
-[0-9]* { ret_print("CINT");strcpy(yylval.val,yytext); return CINT;}
-[0-9]*\.[0-9]* { ret_print("CFLOAT");  strcpy(yylval.val,yytext);return CFLOAT; }
-. {printf("Unknown Symbol %s at line no %d",yytext,lineno); }
+[a-zA-Z_][a-zA-Z0-9_]* { ret_print("ID"); insert("ID",yytext,NULL,NULL,lineNo); yylval.ctype.type=-1;strcpy(yylval.ctype.value,yytext);return ID;}
+[0-9]+ { ret_print("CINT");strcpy(yylval.val,yytext); return CINT;}
+[0-9]+\.[0-9]+ { ret_print("CFLOAT");  strcpy(yylval.val,yytext);return CFLOAT; }
+. {printf("Unknown Symbol %s at lineNo no %d",yytext,lineNo); }
 
 %% 
 
-int yywrap()  
-{  
+int yywrap()  {  
     strcpy(yylval.val,yytext);return 1;
 } 
-void ret_print(char *token_type)
-{
-	//printf("yytext: %s\ttoken: %s\tlineno: %d\n", yytext, token_type, lineno);
-}
 
-/*int main()
-{
-	yylex();
-  printf("Symbol Table : \n");
-  display();
+void ret_print(char *token_type) {
 }
-*/

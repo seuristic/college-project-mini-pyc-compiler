@@ -5,8 +5,6 @@
 #include<string.h>
 #define MAXQUADS 250
 
-
-
 FILE *fp_icg, *fp_quad;
 char temp_var[100];
 int m = 0;        //string length for temp_var
@@ -1071,240 +1069,107 @@ Add_Exp: Mul_Exp
   temp_var[m] = '\0';
 
   strcpy($$.lhs,temp_var);
-  //sprintf($$.code,"hello%s = %s + %s",temp_var,$1.lhs,$3.lhs);
-
-  //printf("\ncode is %s\n",$$.code);
-
-  //printf("Quadruple is :\n");
-  //printf("+\t%s\t%s\t%s\n",$1.lhs,$3.lhs,temp_var);
   sprintf($$.code,"%s%s\n+\t%s\t%s\t%s\n",$1.code,$3.code,$1.lhs,$3.lhs,temp_var);
-
-  //fprintf(fp_quad,"+ \t %s \t %s \t \t%s",$1.lhs,$3.code,temp_var); //op a1 a2 res
-  
   exprno=1;
 }
 | Add_Exp SUB Mul_Exp
 {
-  /*$$.node = create_node(NULL,"Add_Exp",0); 
-  add_child($$.node,$1.node);
-  add_sibling($$.node,create_node(NULL,"-",0));
-  add_sibling($$.node,create_node(NULL,"Mul_Exp",0));
-  add_child(end_node($$.node),$3.node);*/
-
   sprintf(temp_var,"t%d",tempno++);
   m = strlen(temp_var);
   temp_var[m] = '\0';
-
   sprintf($$.lhs,temp_var);
   sprintf($$.code,"%s\n%s\n-\t%s\t%s\t%s\n",$1.code,$3.code,$1.lhs,$3.lhs,temp_var);
-
-  //printf("\ncode is %s\n",$$.code);
-
-  //printf("Quadruple is :\n");
-  //printf("-\t%s\t%s\t%s\n",$1.lhs,$3.code,temp_var);
-
-  //fprintf(fp_quad,"- \t %s \t %s \t \t%s",$1.lhs,$3.code,temp_var); //op a1 a2 res
-  
   exprno=1;
 }
 ;
 Bit_Exp: Add_Exp 
 {
-  /*$$.node = create_node(NULL,"Add_Exp",0); 
-  add_child($$.node,$1.node);*/
-
   strcpy($$.code,$1.code);
   strcpy($$.lhs,$1.lhs);
 }
 | Bit_Exp XOR Add_Exp 
 {
-  /*$$.node = create_node(NULL,"Bit_Exp",0); 
-  add_child($$.node,$1.node);
-  add_sibling($$.node,create_node(NULL,"^",0));
-  add_sibling($$.node,create_node(NULL,"Add_Exp",0));
-  add_child(end_node($$.node),$3.node);*/
-
   sprintf(temp_var,"t%d",tempno++);
   m = strlen(temp_var);
   temp_var[m] = '\0';
-
   sprintf($$.lhs,temp_var);
-  //sprintf($$.code,"^\t%s\t%s\t%s\n",$1.lhs,$3.code,temp_var);
-
-  //printf("\ncode is %s\n",$$.code);
-
-  //printf("Quadruple is :\n");
   sprintf($$.code,"%s\n%s\n^\t%s\t%s\t%s\n",$1.code,$3.code,$1.lhs,$3.lhs,temp_var);
-
-  //fprintf(fp_quad,"^ \t %s \t %s \t \t%s",$1.lhs,$3.code,temp_var); //op a1 a2 res
-  
   exprno=1;
-
-
 }
 | Bit_Exp BAND Add_Exp 
 {
-  /*$$.node = create_node(NULL,"Bit_Exp",0); 
-  add_child($$.node,$1.node);
-  add_sibling($$.node,create_node(NULL,"&",0));
-  add_sibling($$.node,create_node(NULL,"Add_Exp",0));
-  add_child(end_node($$.node),$3.node);*/
-
   sprintf(temp_var,"t%d",tempno++);
   m = strlen(temp_var);
   temp_var[m] = '\0';
-
   sprintf($$.lhs,temp_var);
-  //sprintf($$.code,"%s\n%s\n&\t%s\t%s\t%s\n",$1.code,$3.code,$1.lhs,$3.lhs,temp_var);
-
-  //printf("\ncode is %s\n",$$.code);
-
-  //printf("Quadruple is :\n");
   sprintf($$.code,"%s\n%s\n&\t%s\t%s\t%s\n",$1.code,$3.code,$1.lhs,$3.lhs,temp_var);
-
-  //fprintf(fp_quad,"& \t %s \t %s \t \t%s",$1.lhs,$3.code,temp_var); //op a1 a2 res
-  
   exprno=1;
 }
 | Bit_Exp BOR Add_Exp
 {
-  /*$$.node = create_node(NULL,"Bit_Exp",0); 
-  add_child($$.node,$1.node);
-  add_sibling($$.node,create_node(NULL,"|",0));
-  add_sibling($$.node,create_node(NULL,"Add_Exp",0));
-  add_child(end_node($$.node),$3.node);*/
-
-
   sprintf(temp_var,"t%d",tempno++);
   m = strlen(temp_var);
   temp_var[m] = '\0';
-
   sprintf($$.lhs,temp_var);
-  //sprintf($$.code,"%s\n%s\n|\t%s\t%s\t%s\n",$1.code,$3.code,$1.lhs,$3.lhs,temp_var);
-
-  //printf("\ncode is %s\n",$$.code);
-
-  //printf("Quadruple is :\n");
   sprintf($$.code,"%s\n%s\n|\t%s\t%s\t%s\n",$1.code,$3.code,$1.lhs,$3.lhs,temp_var);
-
-  //fprintf(fp_quad,"| \t %s \t %s \t \t%s",$1.lhs,$3.code,temp_var); //op a1 a2 res
-  
   exprno=1;
 }
 ;
 Rel_Exp: Bit_Exp 
 {
-  /*$$.node = create_node(NULL,"Bit_Exp",0); 
-  add_child($$.node,$1.node);*/
-
   strcpy($$.code,$1.code);
   strcpy($$.lhs,$1.lhs);
 }
 | Rel_Exp G Bit_Exp 
 {
-  /*$$.node = create_node(NULL,"Rel_Exp",0); 
-  add_child($$.node,$1.node);
-  add_sibling($$.node,create_node(NULL,">",0));
-  add_sibling($$.node,create_node(NULL,"Bit_Exp",0));
-  add_child(end_node($$.node),$3.node);*/
-
   sprintf(temp_var,"t%d",tempno++);
   m = strlen(temp_var);
   temp_var[m] = '\0';
-  ////printf("code is : \n%s = %s > %s\n",temp_var, $1.lhs, $3.lhs);
-  //printf(">\t%s\t%s\t%s\n", $1.lhs, $3.lhs, temp_var);
   sprintf($$.code,">\t%s\t%s\t%s\n", $1.lhs, $3.lhs, temp_var);
   strncpy($$.lhs, temp_var, m+1);
 }
 | Rel_Exp GE Bit_Exp 
 {
-  /*$$.node = create_node(NULL,"Rel_Exp",0); 
-  add_child($$.node,$1.node);
-  add_sibling($$.node,create_node(NULL,">=",0));
-  add_sibling($$.node,create_node(NULL,"Bit_Exp",0));
-  add_child(end_node($$.node),$3.node);*/
-
-
   sprintf(temp_var,"t%d",tempno++);
   m = strlen(temp_var);
   temp_var[m] = '\0';
-  ////printf("code is:\n %s = %s >= %s\n",temp_var, $1.code, $3.code);
-  //printf(">=\t%s\t%s\t%s\n", $1.code, $3.code, temp_var);
-
   sprintf($$.code,"%s\n%s\n>=\t%s\t%s\t%s\n", $1.code, $3.code,$1.lhs,$3.lhs, temp_var);
   strncpy($$.lhs, temp_var, m+1);
 }
 | Rel_Exp L Bit_Exp 
 {
-  /*$$.node = create_node(NULL,"Rel_Exp",0); 
-  add_child($$.node,$1.node);
-  add_sibling($$.node,create_node(NULL,"<",0));
-  add_sibling($$.node,create_node(NULL,"Bit_Exp",0));
-  add_child(end_node($$.node),$3.node);*/
-
   sprintf(temp_var,"t%d",tempno++);
   m = strlen(temp_var);
   temp_var[m] = '\0';
-  ////printf("code is:\n %s = %s < %s\n",temp_var, $1.code, $3.code);
-  //printf("<\t%s\t%s\t%s\n", $1.code, $3.code, temp_var);
   sprintf($$.code,"%s\n%s\n<\t%s\t%s\t%s\n", $1.code, $3.code,$1.lhs,$3.lhs, temp_var);
   strncpy($$.lhs, temp_var, m+1);
 }
 | Rel_Exp LE Bit_Exp
 {
-  /*$$.node = create_node(NULL,"Rel_Exp",0); 
-  add_child($$.node,$1.node);
-  add_sibling($$.node,create_node(NULL,"<=",0));
-  add_sibling($$.node,create_node(NULL,"Bit_Exp",0));
-  add_child(end_node($$.node),$3.node);*/
-
   sprintf(temp_var,"t%d",tempno++);
   m = strlen(temp_var);
   temp_var[m] = '\0';
-  ////printf("code is:\n %s = %s <= %s\n",temp_var, $1.code, $3.code);
-  //printf("<=\t%s\t%s\t%s\n", $1.code, $3.code, temp_var);
   sprintf($$.code,"<=\t%s\t%s\t%s\n", $1.code, $3.code, temp_var);
   strncpy($$.lhs, temp_var, m+1);
 }
 ;
 Eq_Exp: Rel_Exp 
 {
-  /*$$.node = create_node(NULL,"Rel_Exp",0); 
-  add_child($$.node,$1.node);*/
-
   strcpy($$.code,$1.code);
 }
 | Eq_Exp EOP Rel_Exp 
 {
-  /*$$.node = create_node(NULL,"Eq_Exp",0); 
-  add_child($$.node,$1.node);
-  add_sibling($$.node,create_node(NULL,"==",0));
-  add_sibling($$.node,create_node(NULL,"Rel_Exp",0));
-  add_child(end_node($$.node),$3.node);*/
-
   sprintf(temp_var,"t%d",tempno++);
   m = strlen(temp_var);
   temp_var[m] = '\0';
-  ////printf("code is : \n%s = %s == %s\n", temp_var, $1.code, $3.code);
-  //printf("==\t%s\t%s\t%s\n", $1.code, $3.code, temp_var);
-
-  //strncpy($$.code, temp_var, m+1);   //check out
   strcpy($$.lhs,temp_var);
   sprintf($$.code,"%s\n%s\n==\t%s\t%s\t%s\n", $1.code, $3.code,$1.lhs,$3.lhs, temp_var);
 }
 | Eq_Exp NEOP Rel_Exp 
 {
-  /*$$.node = create_node(NULL,"Eq_Exp",0); 
-  add_child($$.node,$1.node);
-  add_sibling($$.node,create_node(NULL,"!=",0));
-  add_sibling($$.node,create_node(NULL,"Rel_Exp",0));
-  add_child(end_node($$.node),$3.node);*/
-
-
   sprintf(temp_var,"t%d",tempno++);
   m = strlen(temp_var);
   temp_var[m] = '\0';
-  ////printf("code is : \n%s = %s != %s\n", temp_var, $1.code, $3.code);
   sprintf("%s\n%s\n!=\t%s\t%s\t%s\n", $1.code, $3.code,$1.lhs,$3.lhs, temp_var);
 
   strncpy($$.lhs, temp_var, m+1);   //check out
@@ -1312,98 +1177,54 @@ Eq_Exp: Rel_Exp
 ;
 In_Exp: Eq_Exp 
 {
-  /*$$.node = create_node(NULL,"Eq_Exp",0); 
-  add_child($$.node,$1.node);*/
-
   strcpy($$.code,$1.code);
   strcpy($$.lhs,$1.lhs);
 }
 | Eq_Exp IN In_Exp   
 {
-  /*$$.node = create_node(NULL,"Eq_Exp",0); 
-  add_child($$.node,$1.node);
-  add_sibling($$.node,create_node(NULL,"in",0));
-  add_sibling($$.node,create_node(NULL,"In_Exp",0));
-  add_child(end_node($$.node),$3.node);*/
 }
 ;
 And_Exp: In_Exp 
 {
-  /*$$.node = create_node(NULL,"In_Exp",0); 
-  add_child($$.node,$1.node);*/
-
   strcpy($$.code,$1.code);
   strcpy($$.lhs,$1.lhs);
 }
 | In_Exp LAND And_Exp   
 {
-  /*$$.node = create_node(NULL,"In_Exp",0); 
-  add_child($$.node,$1.node);
-  add_sibling($$.node,create_node(NULL,"and",0));
-  add_sibling($$.node,create_node(NULL,"And_Exp",0));
-  add_child(end_node($$.node),$3.node);*/
-  
   sprintf(temp_var,"t%d",tempno++);
   m = strlen(temp_var);
   temp_var[m] = '\0';
-
   strcpy($$.lhs,temp_var);
-
   sprintf($$.code,"%s%s\nand\t%s\t%s\t%s\n",$1.code,$3.code,$1.lhs,$3.lhs,temp_var);
-
-
 }
 ;
 Or_Exp: And_Exp 
 {
   $$=$1;  
-  /*$$.node = create_node(NULL,"And_Exp",0); 
-  add_child($$.node,$1.node);*/
-
   strcpy($$.code,$1.code);
   strcpy($$.lhs,$1.lhs);
 }
 | And_Exp LOR Or_Exp 
 {
   $$=$1;  
-  /*$$.node = create_node(NULL,"And_Exp",0); 
-  add_child($$.node,$1.node);
-  add_sibling($$.node,create_node(NULL,"or",0));
-  add_sibling($$.node,create_node(NULL,"Or_Exp",0));
-  add_child(end_node($$.node),$3.node);*/
-
   sprintf(temp_var,"t%d",tempno++);
   m = strlen(temp_var);
   temp_var[m] = '\0';
-
   strcpy($$.lhs,temp_var);
-
   sprintf($$.code,"%s%s\nor\t%s\t%s\t%s\n",$1.code,$3.code,$1.lhs,$3.lhs,temp_var);
-
-
-
 }
 ;
 
 %% 
-int yyerror(char *msg) 
-{ 
-  printf("Syntax Error\n"); 
+
+int yyerror(char *msg) { 
+  printf("\n⚠️  Syntax Error\n\n"); 
   return 1;
 } 
  
-int main() 
-{ 
+int main() { 
   Quad *allQuads = (Quad*)malloc(sizeof(Quad));
-
-  //head = tree_init();
-  //head->node = create_node(NULL,"Start",0);
   yyparse(); 
-  //printf("Symbol Table");
-  //display_symbol();
-  //printf("\n\nAbstract Syntax Tree\n\n");
-  //printTree(head);
-  
   return 0;
 }
 
